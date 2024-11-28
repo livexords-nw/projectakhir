@@ -40,7 +40,7 @@ if ($total_terjual_result && $total_terjual_result->num_rows > 0) {
     $total_terjual = $total_terjual_result->fetch_assoc()['total'];
 }
 
-// Query produk terpopuler
+// Query produk terlaris
 $produk_terpopuler_result = $connection->query("SELECT nama, jumlah_terjual, harga, gambar FROM produk ORDER BY jumlah_terjual DESC LIMIT 5");
 if ($produk_terpopuler_result) {
     $produk_terpopuler = $produk_terpopuler_result->fetch_all(MYSQLI_ASSOC);
@@ -133,10 +133,10 @@ foreach ($produk_stok as $item) {
     </div>
   </div>
 
-  <!-- Produk Terpopuler -->
+  <!-- produk terlaris -->
 <section class="section">
   <div class="section-header">
-    <h1>Produk Terpopuler</h1>
+    <h1>produk terlaris</h1>
   </div>
 
   <!-- Filter Produk -->
@@ -189,7 +189,7 @@ foreach ($produk_stok as $item) {
       <?php endwhile; ?>
     <?php else: ?>
       <div class="col-12">
-        <div class="alert alert-info">Tidak ada produk terpopuler.</div>
+        <div class="alert alert-info">Tidak ada produk terlaris.</div>
       </div>
     <?php endif; ?>
   </div>

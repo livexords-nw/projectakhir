@@ -16,6 +16,7 @@ if (isset($_POST['submit'])) {
         $_SESSION['login'] = $row;
         $_SESSION['username'] = $row['username'];
         $_SESSION['role'] = $row['role'];
+        $_SESSION['user_id'] = $row['id'];  
 
         write_log("User '{$username}' (Role: '{$row['role']}') berhasil login.", 'SUCCESS');
 

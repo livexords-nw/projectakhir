@@ -110,7 +110,7 @@ $logs = array_slice($filteredLogs, $startLine, $logsPerPage);
                 </div>
                 <button type="submit" class="btn btn-primary">Cari</button>
                 <!-- Tombol Reset -->
-                <a href="logs.php" class="btn btn-secondary ml-2">Reset</a>
+                <a href="logs.php" class="btn btn-primary ml-2">Reset</a>
             </form>
 
             <table class="table table-bordered">

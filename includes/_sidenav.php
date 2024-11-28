@@ -11,14 +11,19 @@
     <ul class="sidebar-menu">
       <li class="menu-header">Dashboard</li>
       <li><a class="nav-link" href="../"><i class="fas fa-fire"></i> <span>Home</span></a></li>
-      <li class="menu-header">Main Feature</li>
-
       <?php if ($_SESSION['login']['role'] === 'admin') : ?>
+      <li class="menu-header">Main Feature</li>
       <li class="dropdown">
         <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-box"></i> <span>Produk</span></a>
         <ul class="dropdown-menu">
           <li><a class="nav-link" href="../produk/index.php"><i class="fas fa-list"></i> List Produk</a></li>
           <li><a class="nav-link" href="../produk/create.php"><i class="fas fa-plus-circle"></i> Tambah Produk</a></li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-file-alt"></i> <span>Pesanan</span></a>
+        <ul class="dropdown-menu">
+            <li><a href="../pesanan/orders_dashboard.php"><i class="fas fa-file-alt"></i> List Pesanan</a></li>
         </ul>
       </li>
       <li class="dropdown">
