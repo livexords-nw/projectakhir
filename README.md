@@ -1,77 +1,47 @@
-# **Project Akhir - Sistem CRUD Produk**
-Proyek ini adalah aplikasi berbasis web sederhana yang menggunakan PHP native dengan integrasi CSS Bootstrap dan JavaScript. Aplikasi ini dibuat untuk mengelola data produk, mencakup fungsi Create, Read, Update, dan Delete (CRUD).
+# **Project Akhir - Sistem CRUD Produk**  
+Aplikasi berbasis web sederhana menggunakan PHP native dengan CSS Bootstrap dan JavaScript. Proyek ini mendukung manajemen produk, mencakup CRUD, serta fitur keamanan dan tampilan responsif.  
 
-## **Fitur Utama**
-1. **Manajemen Produk**:
-   - Tambah produk baru.
-   - Lihat daftar produk.
-   - Edit informasi produk.
-   - Hapus produk.
+## **Fitur Utama**  
+1. **Manajemen Produk**:  
+   - Tambah, lihat, edit, dan hapus produk.  
+2. **Dashboard**:  
+   - Tampilan khusus admin dan user.  
+   - Log aktivitas untuk audit.  
+3. **Keamanan**:  
+   - Sistem login berbasis file `auth.php`.  
+4. **UI/UX**:  
+   - Responsif dengan Bootstrap.  
 
-2. **Dashboard**:
-   - Admin dan user memiliki tampilan dashboard masing-masing.
-   - Log aktivitas disimpan untuk keperluan audit.
+## **Versi Terbaru (1.2.0)**  
+- Penambahan sistem pembelian produk.  
+- Modul baru untuk manajemen produk khusus admin.  
 
-3. **Keamanan**:
-   - Sistem login berbasis file `auth.php`.
-   - Log aktivitas dicatat dalam file `app.log`.
-
-4. **UI/UX**:
-   - Desain antarmuka menggunakan Bootstrap untuk tampilan responsif.
-
----
-
-## **Struktur Folder**
+## **Struktur Folder**  
 ```plaintext
 projectakhir/
 ├── assets/            # File statis (CSS, JS, gambar)
 ├── dashboard/         # Halaman dashboard admin dan user
-├── helper/            # Fungsi pembantu (auth, connection, logger)
-├── includes/          # Layout bagian (header, sidenav, footer)
-├── logs/              # File log aplikasi
+├── helper/            # Fungsi pembantu (auth, koneksi, logger)
+├── includes/          # Layout (header, sidenav, footer)
+├── logs/              # Log aktivitas
 ├── produk/            # Logika CRUD produk
 └── README.md          # Dokumentasi proyek
 ```
 
----
-
-## **Persyaratan Sistem**
-- **Server**: PHP >= 7.4, Apache/Nginx.
-- **Database**: MySQL/MariaDB.
-
----
-
-## **Cara Menjalankan Proyek**
-1. Clone repositori:
+## **Cara Menggunakan**  
+1. Clone repositori:  
    ```bash
    git clone https://github.com/livexords-nw/projectakhir.git
    ```
-2. Import database:
-   - Gunakan file `database.sql` (jika ada) untuk membuat tabel yang diperlukan.
-3. Konfigurasi database:
-   - Edit file `helper/connection.php` sesuai kredensial database Anda.
-4. Jalankan server lokal:
+2. Import file `database.sql` untuk membuat tabel.  
+3. Konfigurasi `helper/connection.php` sesuai database.  
+4. Jalankan:  
    ```bash
    php -S localhost:8000
-   ```
-5. Akses aplikasi di browser: `http://localhost:8000`.
+   ```  
+5. Akses: `http://localhost:8000`.  
 
----
+## **Kontribusi**  
+Buka *issue* atau buat *pull request* untuk saran atau perbaikan.
 
-## **Daftar File Utama**
-1. **`index.php`**: Halaman utama aplikasi.
-2. **`produk/`**:
-   - `create.php`: Tambah produk.
-   - `edit.php`: Edit produk.
-   - `delete.php`: Hapus produk.
-   - `index.php`: Daftar produk.
-3. **`helper/connection.php`**: Koneksi ke database.
-4. **`includes/_header.php`**: Template header.
-5. **`dashboard/admin_dashboard.php`**: Dashboard admin.
-
----
-
-## **Catatan Tambahan**
-Jika Anda menemukan bug atau memiliki saran, silakan buat *issue* di [repositori GitHub ini](https://github.com/livexords-nw/projectakhir).
-
----
+--- 
