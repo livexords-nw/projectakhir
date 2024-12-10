@@ -18,6 +18,34 @@ if (isset($_SESSION['info'])) {
 
 // Get table number from session
 $table_number = $_SESSION['table_number'] ?? 'Unknown'; // Default to 'Unknown' if no table number exists
+
+$errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
+$old = isset($_SESSION['old']) ? $_SESSION['old'] : [];
+$info = isset($_SESSION['info']) ? $_SESSION['info'] : null;
+
+if ($info) {
+    $status = $info['status'];
+    $message = $info['message'];
+
+    if (is_array($message)) {
+        $message = implode(' | ', $message);
+    }
+
+    echo "<script>
+      document.addEventListener('DOMContentLoaded', function() {
+          iziToast." . ($status === 'success' ? 'success' : 'error') . "( {
+              title: '" . ($status === 'success' ? 'Sukses' : 'Gagal') . "',
+              message: '{$message}',
+              position: 'topCenter',
+              timeout: 5000
+          });
+      });
+  </script>";
+
+    unset($_SESSION['info']);
+}
+
+unset($_SESSION['errors'], $_SESSION['old']);
 ?>
 
 <!DOCTYPE html>

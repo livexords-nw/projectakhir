@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 
 require_once '../includes/_top.php';
@@ -12,13 +12,13 @@ $old = isset($_SESSION['old']) ? $_SESSION['old'] : [];
 $info = isset($_SESSION['info']) ? $_SESSION['info'] : null;
 
 if ($info) {
-  $status = $info['status']; 
+  $status = $info['status'];
   $message = $info['message'];
 
   if (is_array($message)) {
     $message = implode(' | ', $message);
   }
-  
+
   echo "<script>
       document.addEventListener('DOMContentLoaded', function() {
           iziToast." . ($status === 'success' ? 'success' : 'error') . "( {
@@ -29,7 +29,7 @@ if ($info) {
           });
       });
   </script>";
-  
+
   unset($_SESSION['info']);
 }
 
@@ -110,12 +110,16 @@ write_log("{$username} membuka form Tambah Data Produk.", 'INFO');
       message: 'Apakah Anda yakin ingin menyimpan data ini?',
       position: 'center',
       buttons: [
-        ['<button>Ya</button>', function (instance, toast) {
-          document.getElementById('formProduk').submit(); 
-          instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+        ['<button>Ya</button>', function(instance, toast) {
+          document.getElementById('formProduk').submit();
+          instance.hide({
+            transitionOut: 'fadeOut'
+          }, toast, 'button');
         }],
-        ['<button>Tidak</button>', function (instance, toast) {
-          instance.hide({ transitionOut: 'fadeOut' }, toast, 'button'); 
+        ['<button>Tidak</button>', function(instance, toast) {
+          instance.hide({
+            transitionOut: 'fadeOut'
+          }, toast, 'button');
         }]
       ]
     });

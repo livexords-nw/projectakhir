@@ -4,7 +4,7 @@ require_once '../helper/connection.php';
 require_once '../helper/logger.php';
 
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 
 // Ambil ID dari parameter GET
@@ -12,10 +12,10 @@ $id = $_GET['id'] ?? null;
 
 // Pastikan ID ada dan valid
 if (!$id || !is_numeric($id)) {
-    // Jika ID tidak valid, kembalikan ke index dengan pesan error
-    $_SESSION['info'] = ['status' => 'danger', 'message' => 'ID produk tidak valid.'];
-    header('Location: ./index.php');
-    exit;
+  // Jika ID tidak valid, kembalikan ke index dengan pesan error
+  $_SESSION['info'] = ['status' => 'danger', 'message' => 'ID produk tidak valid.'];
+  header('Location: ./index.php');
+  exit;
 }
 
 // Ambil data produk berdasarkan ID
@@ -24,9 +24,9 @@ $row = mysqli_fetch_assoc($query);
 
 // Jika data tidak ditemukan
 if (!$row) {
-    $_SESSION['info'] = ['status' => 'danger', 'message' => 'Data produk tidak ditemukan.'];
-    header('Location: ./index.php');
-    exit;
+  $_SESSION['info'] = ['status' => 'danger', 'message' => 'Data produk tidak ditemukan.'];
+  header('Location: ./index.php');
+  exit;
 }
 
 // Ambil data validasi jika ada
@@ -35,13 +35,13 @@ $old = isset($_SESSION['old']) ? $_SESSION['old'] : [];
 $info = isset($_SESSION['info']) ? $_SESSION['info'] : null;
 
 if ($info) {
-  $status = $info['status']; 
+  $status = $info['status'];
   $message = $info['message'];
 
   if (is_array($message)) {
     $message = implode(' | ', $message);
   }
-  
+
   echo "<script>
       document.addEventListener('DOMContentLoaded', function() {
           iziToast." . ($status === 'success' ? 'success' : 'error') . "({
@@ -52,7 +52,7 @@ if ($info) {
           });
       });
   </script>";
-  
+
   unset($_SESSION['info']);
 }
 
@@ -164,12 +164,16 @@ require_once '../includes/_bottom.php';
       message: 'Apakah Anda yakin ingin menyimpan perubahan?',
       position: 'center',
       buttons: [
-        ['<button>Ya</button>', function (instance, toast) {
+        ['<button>Ya</button>', function(instance, toast) {
           document.getElementById('formupdate').submit();
-          instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+          instance.hide({
+            transitionOut: 'fadeOut'
+          }, toast, 'button');
         }],
-        ['<button>Tidak</button>', function (instance, toast) {
-          instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+        ['<button>Tidak</button>', function(instance, toast) {
+          instance.hide({
+            transitionOut: 'fadeOut'
+          }, toast, 'button');
         }]
       ]
     });

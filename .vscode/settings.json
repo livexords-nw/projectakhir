@@ -1,0 +1,34 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.associations": {
+    "*.json": "json",
+    "*.js": "javascript",
+    "*.css": "css",
+    "*.php": "php",
+    "*.html": "html"
+  },
+
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "[php]": {
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "prettier.plugins": ["./node_modules/@prettier/plugin-php"],
+  "prettier.requireConfig": false,
+  "files.associations": {
+    "*.php": "php",
+    "*.html": "html",
+    "*.css": "css",
+    "*.js": "javascript"
+  }
+}

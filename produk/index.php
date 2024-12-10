@@ -42,7 +42,7 @@ $result = mysqli_query($connection, "SELECT * FROM produk");
                       <img src="../uploads/<?= $data['gambar'] ?>" alt="Gambar Barang" style="width: 80px; height: auto;">
                     </td>
                     <td>
-                      <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="#" 
+                      <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="#"
                         onclick="confirmDelete(<?= $data['id'] ?>)">
                         <i class="fas fa-trash fa-fw"></i>
                       </a>
@@ -111,12 +111,16 @@ endif;
       message: 'Apakah Anda yakin ingin menghapus item ini?',
       position: 'center',
       buttons: [
-        ['<button>Ya</button>', function (instance, toast) {
+        ['<button>Ya</button>', function(instance, toast) {
           window.location.href = `delete.php?id=${id}`;
-          instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+          instance.hide({
+            transitionOut: 'fadeOut'
+          }, toast, 'button');
         }],
-        ['<button>Tidak</button>', function (instance, toast) {
-          instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+        ['<button>Tidak</button>', function(instance, toast) {
+          instance.hide({
+            transitionOut: 'fadeOut'
+          }, toast, 'button');
         }]
       ]
     });

@@ -1,18 +1,18 @@
 <?php
-require_once '../includes/_top.php'; 
-require_once '../helper/connection.php'; 
-require_once '../helper/auth.php'; 
-require_once '../helper/logger.php'; 
+require_once '../includes/_top.php';
+require_once '../helper/connection.php';
+require_once '../helper/auth.php';
+require_once '../helper/logger.php';
 
 // Pastikan hanya admin yang dapat mengakses halaman ini
 checkAdmin();
 
 // Log aktivitas admin
 if (isset($_SESSION['login']['username'])) {
-    $username = $_SESSION['login']['username'];
-    write_log("Admin '$username' mengakses halaman dashboard.");
+  $username = $_SESSION['login']['username'];
+  write_log("Admin '$username' mengakses halaman dashboard.");
 } else {
-    write_log("Akses dashboard tanpa sesi login.");
+  write_log("Akses dashboard tanpa sesi login.");
 }
 
 // Query untuk daftar pesanan yang belum diterima
@@ -28,13 +28,13 @@ $old = isset($_SESSION['old']) ? $_SESSION['old'] : [];
 $info = isset($_SESSION['info']) ? $_SESSION['info'] : null;
 
 if ($info) {
-  $status = $info['status']; 
+  $status = $info['status'];
   $message = $info['message'];
 
   if (is_array($message)) {
     $message = implode(' | ', $message);
   }
-  
+
   echo "<script>
       document.addEventListener('DOMContentLoaded', function() {
           iziToast." . ($status === 'success' ? 'success' : 'error') . "( {
@@ -45,7 +45,7 @@ if ($info) {
           });
       });
   </script>";
-  
+
   unset($_SESSION['info']);
 }
 
@@ -117,6 +117,7 @@ unset($_SESSION['errors'], $_SESSION['old']);
                   <input type="hidden" name="order_id" value="<?= $pesanan['id'] ?>">
                   <button type="submit" class="btn btn-success">Pesanan Selesai</button>
                 </form>
+                <a href="edit_order.php?id=<?= $pesanan['id'] ?>" class="btn btn-info mt-2">Edit Pesanan</a> <!-- Edit button -->
               </div>
             </div>
           </div>
@@ -128,6 +129,7 @@ unset($_SESSION['errors'], $_SESSION['old']);
       <?php endif; ?>
     </div>
   </section>
+
 
   <!-- Daftar Pesanan Selesai (History) -->
   <section class="section mt-5">

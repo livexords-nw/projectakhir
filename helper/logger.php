@@ -18,9 +18,14 @@ function write_log($message, $level = 'INFO')
     $logMessage = "[{$timestamp}] [{$level}] [File: {$caller_file}] [Line: {$caller_line}] - {$message}" . PHP_EOL;
 
     // Tentukan file log
-    $logFile = '../logs/app.log';
+    $logDirectory = __DIR__ . '/../logs';
+    $logFile = $logDirectory . '/app.log';
+
+    // Periksa apakah folder logs ada, jika tidak buat
+    if (!is_dir($logDirectory)) {
+        mkdir($logDirectory, 0755, true);
+    }
 
     // Tulis log ke file
     file_put_contents($logFile, $logMessage, FILE_APPEND);
 }
-?>

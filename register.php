@@ -1,33 +1,94 @@
 <?php
+session_start();
 require_once 'helper/connection.php';
-require_once 'helper/logger.php'; 
+require_once 'helper/logger.php';
 
 if (isset($_POST['submit'])) {
-    $username = mysqli_real_escape_string($connection, $_POST['username']);
-    $password = mysqli_real_escape_string($connection, $_POST['password']);
-    $email = mysqli_real_escape_string($connection, $_POST['email']);
+  $username = trim($_POST['username']);
+  $password = trim($_POST['password']);
+  $repeatPassword = trim($_POST['repeat_password']);
+  $email = trim($_POST['email']);
 
+  if (empty($username) || empty($password) || empty($repeatPassword) || empty($email)) {
+    $_SESSION['info'] = [
+      'status' => 'danger',
+      'message' => 'Semua field harus diisi!'
+    ];
+  } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $_SESSION['info'] = [
+      'status' => 'danger',
+      'message' => 'Format email tidak valid!'
+    ];
+  } elseif ($password !== $repeatPassword) {
+    $_SESSION['info'] = [
+      'status' => 'danger',
+      'message' => 'Password dan Repeat Password tidak cocok!'
+    ];
+  } elseif (strlen($password) < 6) {
+    $_SESSION['info'] = [
+      'status' => 'danger',
+      'message' => 'Password minimal 6 karakter!'
+    ];
+  } else {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    $checkUserQuery = "SELECT * FROM users WHERE username = '$username' LIMIT 1";
-    $checkResult = mysqli_query($connection, $checkUserQuery);
+    $checkUserQuery = "SELECT id FROM users WHERE username = ?";
+    $stmt = mysqli_prepare($connection, $checkUserQuery);
+    mysqli_stmt_bind_param($stmt, 's', $username);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
 
-    if (mysqli_num_rows($checkResult) > 0) {
-        echo "<script>alert('Username sudah digunakan, silakan pilih username lain!');</script>";
-        write_log("Gagal registrasi: Username '$username' sudah digunakan.", 'INFO'); 
+    if (mysqli_stmt_num_rows($stmt) > 0) {
+      $_SESSION['info'] = [
+        'status' => 'danger',
+        'message' => 'Username sudah digunakan, silakan pilih username lain!'
+      ];
+      write_log("Gagal registrasi: Username '$username' sudah digunakan.", 'INFO');
     } else {
-        $sql = "INSERT INTO users (username, password, email, role) VALUES ('$username', '$hashedPassword', '$email', 'user')";
-        if (mysqli_query($connection, $sql)) {
-            echo "<script>alert('Registrasi berhasil! Silakan login.'); window.location.href = 'login.php';</script>";
-            write_log("User '$username' berhasil registrasi."); 
-        } else {
-            echo "<script>alert('Terjadi kesalahan, silakan coba lagi!');</script>";
-            write_log("Gagal registrasi: Terjadi kesalahan saat menyimpan data pengguna.", 'ERROR'); 
-        }
+      $insertQuery = "INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, 'user')";
+      $stmt = mysqli_prepare($connection, $insertQuery);
+      mysqli_stmt_bind_param($stmt, 'sss', $username, $hashedPassword, $email);
+
+      if (mysqli_stmt_execute($stmt)) {
+        $_SESSION['info'] = [
+          'status' => 'success',
+          'message' => 'Registrasi berhasil! Silakan login.'
+        ];
+        write_log("User '$username' berhasil registrasi.");
+        header("Location: login.php");
+        exit;
+      } else {
+        $_SESSION['info'] = [
+          'status' => 'danger',
+          'message' => 'Terjadi kesalahan, silakan coba lagi!'
+        ];
+        write_log("Gagal registrasi: Kesalahan saat menyimpan data pengguna.", 'ERROR');
+      }
     }
+
+    mysqli_stmt_close($stmt);
+  }
+}
+
+$info = isset($_SESSION['info']) ? $_SESSION['info'] : null;
+if ($info) {
+  $status = $info['status'];
+  $message = $info['message'];
+
+  echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            iziToast." . ($status === 'success' ? 'success' : 'error') . "({
+                title: '" . ($status === 'success' ? 'Sukses' : 'Gagal') . "',
+                message: '{$message}',
+                position: 'topCenter',
+                timeout: 5000
+            });
+        });
+    </script>";
+
+  unset($_SESSION['info']);
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -94,7 +155,15 @@ if (isset($_POST['submit'])) {
                   </div>
 
                   <div class="form-group">
-                    <button name="submit" type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
+                    <label for="repeat_password">Repeat Password</label>
+                    <input id="repeat_password" type="password" class="form-control" name="repeat_password" tabindex="4" required>
+                    <div class="invalid-feedback">
+                      Mohon isi ulang password
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <button name="submit" type="submit" class="btn btn-primary btn-lg btn-block" tabindex="5">
                       Register
                     </button>
                   </div>
@@ -128,6 +197,22 @@ if (isset($_POST['submit'])) {
         passwordInput.type = 'password';
         icon.classList.remove('fa-eye-slash');
         icon.classList.add('fa-eye');
+      }
+    });
+
+    // Validate password and repeat password
+    document.querySelector('form').addEventListener('submit', function(event) {
+      const password = document.getElementById('password').value;
+      const repeatPassword = document.getElementById('repeat_password').value;
+
+      if (password !== repeatPassword) {
+        event.preventDefault();
+        iziToast.error({
+          title: 'Gagal',
+          message: 'Password dan Repeat Password tidak cocok!',
+          position: 'topCenter',
+          timeout: 5000
+        });
       }
     });
   </script>

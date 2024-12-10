@@ -46,11 +46,11 @@ class Produk
 
         $stmt = $this->connection->prepare($query);
         $stmt->bind_param(
-            "sdssi", 
-            $data['nama'], 
-            $data['harga'], 
-            $data['stock'], 
-            $gambarBaru, 
+            "sdssi",
+            $data['nama'],
+            $data['harga'],
+            $data['stock'],
+            $gambarBaru,
             $id
         );
 
@@ -130,17 +130,16 @@ try {
 
     // Melakukan update produk
     $produk->update($_POST['id'], $data, $_FILES['gambar']);
-    
+
     // Menyimpan pesan sukses ke dalam session
     $_SESSION['info'] = [
-        'status' => 'success', 
+        'status' => 'success',
         'message' => "Produk berhasil diperbarui. Nama: {$data['nama']} | Harga: Rp" . number_format($data['harga'], 0, ',', '.') . " | Stock: {$data['stock']}."
     ];
 
     // Arahkan ke halaman index setelah berhasil
     header('Location: ./index.php');
     exit;
-
 } catch (Exception $e) {
     // Menyimpan pesan error ke dalam session
     $errorMessage = json_decode($e->getMessage(), true);
@@ -148,15 +147,14 @@ try {
         $errorMessage = ['error' => 'Terjadi kesalahan pada sistem.'];
     }
     $_SESSION['info'] = [
-        'status' => 'danger', 
+        'status' => 'danger',
         'message' => implode(' | ', $errorMessage)
     ];
     write_log("Error memperbarui produk: " . $e->getMessage(), 'ERROR');
 
     // Menyimpan input lama untuk digunakan di form edit
-    $_SESSION['old'] = $_POST; 
+    $_SESSION['old'] = $_POST;
     $_SESSION['errors'] = $errorMessage; // Menyimpan error untuk ditampilkan di form
     header('Location: ./edit.php?id=' . $_POST['id']);
     exit;
 }
-?>

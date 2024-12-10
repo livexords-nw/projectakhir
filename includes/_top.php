@@ -2,6 +2,12 @@
 require_once '../helper/auth.php';
 
 isLogin();
+
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+ob_start();
+
 ?>
 
 <!DOCTYPE html>

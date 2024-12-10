@@ -179,4 +179,3 @@ if ($result['status'] === 'failed') {
 
 header('Location: ./index.php');
 exit;
-?>

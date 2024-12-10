@@ -1,40 +1,53 @@
 <?php
 require_once 'helper/connection.php';
-require_once './helper/logger.php';
+require_once 'helper/logger.php';
 session_start();
 
 if (isset($_POST['submit'])) {
-    $username = mysqli_real_escape_string($connection, $_POST['username']);
-    $password = mysqli_real_escape_string($connection, $_POST['password']);
-    
-    // Query untuk memeriksa user dan role
-    $sql = "SELECT * FROM users WHERE username='$username' LIMIT 1";
-    $result = mysqli_query($connection, $sql);
-    
-    $row = mysqli_fetch_assoc($result);
-    if ($row && password_verify($password, $row['password'])) {
-        $_SESSION['login'] = $row;
-        $_SESSION['username'] = $row['username'];
-        $_SESSION['role'] = $row['role'];
-        $_SESSION['user_id'] = $row['id'];  
+  $username = mysqli_real_escape_string($connection, $_POST['username']);
+  $password = mysqli_real_escape_string($connection, $_POST['password']);
 
-        write_log("User '{$username}' (Role: '{$row['role']}') berhasil login.", 'SUCCESS');
+  // Query untuk memeriksa user dan role
+  $sql = "SELECT * FROM users WHERE username='$username' LIMIT 1";
+  $result = mysqli_query($connection, $sql);
+  $row = mysqli_fetch_assoc($result);
 
-        if ($row['role'] === 'admin') {
-            header('Location: dashboard/admin_dashboard.php');
-        } else {
-            header('Location: dashboard/user_dashboard.php');
-        }
-        exit();
-    } else {
-        write_log("Percobaan login gagal untuk username '{$username}'.", 'ERROR');
+  if ($row && password_verify($password, $row['password'])) {
+    $_SESSION['login'] = $row;
+    $_SESSION['username'] = $row['username'];
+    $_SESSION['role'] = $row['role'];
+    $_SESSION['user_id'] = $row['id'];
 
-        $_SESSION['error'] = "Username atau password salah.";
-        header('Location: login.php');
-        exit();
-    }
+    write_log("User '{$username}' (Role: '{$row['role']}') berhasil login.", 'SUCCESS');
+
+    $_SESSION['info'] = [
+      'status' => 'success',
+      'message' => $row['role'] === 'admin'
+        ? "Kamu berhasil login sebagai admin."
+        : "Kamu berhasil login dengan username {$username}."
+    ];
+
+    header('Location: ' . ($row['role'] === 'admin' ? 'dashboard/admin_dashboard.php' : 'dashboard/user_dashboard.php'));
+    exit();
+  } else {
+    write_log("Percobaan login gagal untuk username '{$username}'.", 'ERROR');
+    $_SESSION['info'] = [
+      'status' => 'error',
+      'message' => "Username atau password salah untuk username {$username}."
+    ];
+
+    header('Location: login.php');
+    exit();
+  }
+}
+
+// Ambil info dari session (jika ada) untuk ditampilkan dengan iziToast
+$info = isset($_SESSION['info']) ? $_SESSION['info'] : null;
+if ($info) {
+  unset($_SESSION['info']); // Hapus setelah ditampilkan
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,6 +64,13 @@ if (isset($_POST['submit'])) {
   <!-- Template CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/components.css">
+
+  <!-- iziToast CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
+
+  <!-- iziToast JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+
 </head>
 
 <body>
@@ -136,6 +156,21 @@ if (isset($_POST['submit'])) {
       }
     });
   </script>
+
+  <!-- Notifikasi iziToast -->
+  <script>
+    <?php if ($info): ?>
+      document.addEventListener('DOMContentLoaded', function() {
+        iziToast.<?= $info['status'] ?>({
+          title: "<?= ucfirst($info['status']) ?>",
+          message: "<?= $info['message'] ?>",
+          position: 'topCenter',
+          timeout: 5000
+        });
+      });
+    <?php endif; ?>
+  </script>
+
 </body>
 
 </html>

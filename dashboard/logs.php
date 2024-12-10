@@ -24,21 +24,21 @@ function getLogs($logFile, $search = '', $dateFrom = '', $dateTo = '', $timeFrom
 
     // Filter log berdasarkan pencarian
     if ($search) {
-        $logs = array_filter($logs, function($log) use ($search) {
+        $logs = array_filter($logs, function ($log) use ($search) {
             return stripos($log, $search) !== false;  // Mencari kata kunci
         });
     }
 
     // Filter berdasarkan rentang tanggal (dari dan sampai)
     if ($dateFrom) {
-        $logs = array_filter($logs, function($log) use ($dateFrom) {
+        $logs = array_filter($logs, function ($log) use ($dateFrom) {
             preg_match('/\[(.*?)\]/', $log, $matches);
             $logDate = isset($matches[1]) ? explode(' ', $matches[1])[0] : '';
             return strtotime($logDate) >= strtotime($dateFrom);
         });
     }
     if ($dateTo) {
-        $logs = array_filter($logs, function($log) use ($dateTo) {
+        $logs = array_filter($logs, function ($log) use ($dateTo) {
             preg_match('/\[(.*?)\]/', $log, $matches);
             $logDate = isset($matches[1]) ? explode(' ', $matches[1])[0] : '';
             return strtotime($logDate) <= strtotime($dateTo);
@@ -47,14 +47,14 @@ function getLogs($logFile, $search = '', $dateFrom = '', $dateTo = '', $timeFrom
 
     // Filter berdasarkan rentang waktu (dari dan sampai)
     if ($timeFrom) {
-        $logs = array_filter($logs, function($log) use ($timeFrom) {
+        $logs = array_filter($logs, function ($log) use ($timeFrom) {
             preg_match('/\[(.*?)\]/', $log, $matches);
             $logTime = isset($matches[1]) ? explode(' ', $matches[1])[1] : '';
             return strtotime($logTime) >= strtotime($timeFrom);
         });
     }
     if ($timeTo) {
-        $logs = array_filter($logs, function($log) use ($timeTo) {
+        $logs = array_filter($logs, function ($log) use ($timeTo) {
             preg_match('/\[(.*?)\]/', $log, $matches);
             $logTime = isset($matches[1]) ? explode(' ', $matches[1])[1] : '';
             return strtotime($logTime) <= strtotime($timeTo);
