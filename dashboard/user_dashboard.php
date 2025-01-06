@@ -11,6 +11,32 @@ if (isset($_SESSION['login']['username'])) {
     write_log("User '$username' mengakses halaman dashboard.", 'INFO');
 }
 
+$errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
+$info = isset($_SESSION['info']) ? $_SESSION['info'] : null;
+
+if ($info) {
+    $status = $info['status'];
+    $message = $info['message'];
+
+    if (is_array($message)) {
+        $message = implode(' | ', $message);
+    }
+
+    echo "<script>
+          document.addEventListener('DOMContentLoaded', function() {
+              iziToast." . ($status === 'success' ? 'success' : 'error') . "( {
+                  title: '" . ($status === 'success' ? 'Sukses' : 'Gagal') . "',
+                  message: '{$message}',
+                  position: 'topCenter',
+                  timeout: 5000
+              });
+          });
+      </script>";
+
+    unset($_SESSION['info']);
+}
+unset($_SESSION['errors']);
+
 // Ambil input pencarian
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
@@ -28,105 +54,25 @@ $result = mysqli_query($connection, $query);
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
-
-$errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
-$info = isset($_SESSION['info']) ? $_SESSION['info'] : null;
-
-if ($info) {
-    $status = $info['status'];
-    $message = $info['message'];
-
-    if (is_array($message)) {
-        $message = implode(' | ', $message);
-    }
-
-    echo "<script>
-        document.addEventListener('DOMContentLoaded', function() {
-            iziToast." . ($status === 'success' ? 'success' : 'error') . "( {
-                title: '" . ($status === 'success' ? 'Sukses' : 'Gagal') . "',
-                message: '{$message}',
-                position: 'topCenter',
-                timeout: 5000
-            });
-        });
-    </script>";
-
-    unset($_SESSION['info']);
-}
-unset($_SESSION['errors']);
 ?>
 
 <section class="section">
-    <div class="section-header">
+    <div class="section-header d-flex justify-content-between">
         <h1>Dashboard</h1>
     </div>
 
-    <!-- Keranjang Belanja -->
-    <h2>Keranjang Belanja</h2>
-    <div class="card mb-4">
-        <div class="card-body">
-            <form action="cart/update_cart.php" method="POST">
-                <table class="table table-bordered" id="cart-table">
-                    <thead>
-                        <tr>
-                            <th>Nama Produk</th>
-                            <th>Harga</th>
-                            <th>Jumlah</th>
-                            <th>Subtotal</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($_SESSION['cart'])): ?>
-                            <?php
-                            $total = 0;
-                            foreach ($_SESSION['cart'] as $index => $item):
-                                $subtotal = $item['harga'] * $item['jumlah'];
-                                $total += $subtotal;
-                            ?>
-                                <tr>
-                                    <td><?= $item['nama'] ?></td>
-                                    <td><?= number_format($item['harga'], 2) ?></td>
-                                    <td>
-                                        <input type="number" name="jumlah[<?= $index ?>]" class="form-control" min="1" value="<?= $item['jumlah'] ?>" required>
-                                    </td>
-                                    <td><?= number_format($subtotal, 2) ?></td>
-                                    <td>
-                                        <a href="cart/remove_from_cart.php?id=<?= $item['id'] ?>" class="btn btn-danger btn-sm">Hapus</a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                            <tr>
-                                <td colspan="3"><strong>Total</strong></td>
-                                <td><strong><?= number_format($total, 2) ?></strong></td>
-                                <td></td>
-                            </tr>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="5" class="text-center">Keranjang kosong.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-                <?php if (!empty($_SESSION['cart'])): ?>
-                    <button type="submit" class="btn btn-primary mt-2">Update Jumlah</button>
-                <?php endif; ?>
-            </form>
-            <a href="../produk/checkout.php" class="btn btn-success mt-2">Konfirmasi Pesanan</a>
-        </div>
-    </div>
-
-
-    <!-- Daftar Produk -->
-    <h2>Daftar Produk</h2>
-    <!-- Formulir Pencarian -->
+    <!-- Live Search -->
     <div class="mb-4">
-        <form action="" method="GET" class="form-inline">
-            <input type="text" name="search" class="form-control mr-2" placeholder="Cari produk..." value="<?= htmlspecialchars($search) ?>">
-            <button type="submit" class="btn btn-primary">Cari</button>
-        </form>
+        <input
+            type="text"
+            id="search-bar"
+            class="form-control"
+            placeholder="Cari produk..."
+            autocomplete="off">
     </div>
-    <div class="row">
+
+    <!-- Hasil Pencarian -->
+    <div id="product-list" class="row">
         <?php if (mysqli_num_rows($result) > 0): ?>
             <?php while ($row = mysqli_fetch_assoc($result)): ?>
                 <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
@@ -155,5 +101,25 @@ unset($_SESSION['errors']);
         <?php endif; ?>
     </div>
 </section>
+
+<!-- Script Live Search -->
+<script>
+    document.getElementById('search-bar').addEventListener('input', function() {
+        const searchValue = this.value.trim();
+        const productList = document.getElementById('product-list');
+
+        // Request ke server
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `live_search.php?search=${encodeURIComponent(searchValue)}`, true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                productList.innerHTML = xhr.responseText;
+            } else {
+                console.error('Gagal memuat hasil pencarian.');
+            }
+        };
+        xhr.send();
+    });
+</script>
 
 <?php require_once '../includes/_bottom.php'; ?>

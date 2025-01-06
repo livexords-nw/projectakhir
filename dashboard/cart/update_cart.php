@@ -92,5 +92,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['jumlah'])) {
 }
 
 // Redirect kembali ke halaman dashboard
-header('Location: ../user_dashboard.php');
+header('Location: ../keranjang.php');
 exit;

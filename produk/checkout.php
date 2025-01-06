@@ -3,122 +3,104 @@ session_start();
 require_once '../helper/connection.php';
 require_once '../helper/logger.php';
 
-// Cek apakah user sudah login
+// **1. Validasi Login Pengguna**
 if (!isset($_SESSION['login']['id'])) {
-    // Jika tidak, arahkan ke halaman login
-    header("Location: login.php");
+    header("Location: login.php"); // Arahkan ke halaman login jika belum login
     exit;
 }
 
-// Ambil ID dan username dari session
+// Ambil data pengguna dari sesi
 $user_id = $_SESSION['login']['id'];
-$username = $_SESSION['login']['username'] ?? 'Unknown User';
+$username = $_SESSION['login']['username'] ?? 'Pengguna Tidak Dikenal';
 
-// Cek apakah keranjang belanja kosong
-if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
+// **2. Validasi Keranjang Belanja**
+if (empty($_SESSION['cart'])) {
     $_SESSION['info'] = [
         'status' => 'danger',
         'message' => 'Keranjang belanja Anda kosong!'
     ];
-    // Arahkan kembali ke halaman dashboard user
-    header("Location: ../dashboard/user_dashboard.php");
+    header("Location: ../dashboard/user_dashboard.php"); // Arahkan kembali ke dashboard
     exit;
 }
 
-// Mulai transaksi database
+// **3. Mulai Transaksi Database**
 $connection->begin_transaction();
 
 try {
-    // Hitung total harga dari semua item di dalam keranjang
-    $total_harga = 0;
-    foreach ($_SESSION['cart'] as $item) {
-        $total_harga += $item['harga'] * $item['jumlah'];
-    }
+    // **4. Hitung Total Harga dari Keranjang**
+    $total_harga = array_reduce($_SESSION['cart'], function ($total, $item) {
+        return $total + ($item['harga'] * $item['jumlah']);
+    }, 0);
 
-    // Menetapkan nomor meja secara acak (misalnya T1, T2, dsb)
+    // Nomor meja diacak antara T1-T20
     $table_number = 'T' . rand(1, 20);
 
-    // Query untuk memasukkan data pemesanan
+    // **5. Simpan Data Pemesanan**
     $queryPemesanan = "INSERT INTO pemesanan (nama_pemesan, total_harga, tanggal_pemesanan, status, table_number) 
                        VALUES (?, ?, NOW(), 'pending', ?)";
     $stmtPemesanan = $connection->prepare($queryPemesanan);
 
     if (!$stmtPemesanan) {
-        throw new Exception("Prepare error (queryPemesanan): " . $connection->error);
+        throw new Exception("Gagal menyiapkan query pemesanan: " . $connection->error);
     }
 
-    // Simpan nomor meja dalam session untuk digunakan di halaman lain
-    $_SESSION['table_number'] = $table_number;
-
-    // Bind parameter dan eksekusi query
     $stmtPemesanan->bind_param("sds", $username, $total_harga, $table_number);
     $stmtPemesanan->execute();
+
+    // Dapatkan ID pemesanan yang baru dibuat
     $pemesanan_id = $stmtPemesanan->insert_id;
 
-    // Query untuk memasukkan data ke tabel detail_pemesanan
+    // **6. Simpan Data Detail Pemesanan**
     $queryDetail = "INSERT INTO detail_pemesanan (id_pemesanan, id_produk, user_id, jumlah, subtotal) 
                     VALUES (?, ?, ?, ?, ?)";
     $stmtDetail = $connection->prepare($queryDetail);
 
     if (!$stmtDetail) {
-        throw new Exception("Prepare error (queryDetail): " . $connection->error);
+        throw new Exception("Gagal menyiapkan query detail pemesanan: " . $connection->error);
     }
 
-    // Masukkan detail setiap item dalam keranjang
+    // Masukkan setiap item dari keranjang ke detail pemesanan
     foreach ($_SESSION['cart'] as $item) {
         $subtotal = $item['harga'] * $item['jumlah'];
-
-        // Bind parameter dan eksekusi query
         $stmtDetail->bind_param("iiidd", $pemesanan_id, $item['id'], $user_id, $item['jumlah'], $subtotal);
         $stmtDetail->execute();
     }
 
-    // Hapus atau biarkan stok produk tidak berubah jika tidak perlu
-    // Jika ingin mengurangi stok produk, aktifkan bagian berikut
-    // $queryUpdateStock = "UPDATE produk SET stock = stock - ?, jumlah_terjual = jumlah_terjual + ? WHERE id = ?";
-    // $stmtUpdateStock = $connection->prepare($queryUpdateStock);
-
-    // if (!$stmtUpdateStock) {
-    //     throw new Exception("Prepare error (queryUpdateStock): " . $connection->error);
-    // }
-
-    // foreach ($_SESSION['cart'] as $item) {
-    //     $stmtUpdateStock->bind_param("iii", $item['jumlah'], $item['jumlah'], $item['id']);
-    //     $stmtUpdateStock->execute();
-    // }
-
-    // Commit transaksi jika semuanya berhasil
+    // **7. Commit Transaksi**
     $connection->commit();
 
-    // Kosongkan keranjang setelah pemesanan berhasil
+    // Kosongkan keranjang setelah berhasil checkout
     unset($_SESSION['cart']);
 
-    // Simpan pesan sukses dalam session untuk ditampilkan di halaman berikutnya
+    // Simpan nomor meja untuk digunakan di halaman konfirmasi
+    $_SESSION['table_number'] = $table_number;
+
+    // Simpan pesan sukses ke sesi
     $_SESSION['info'] = [
         'status' => 'success',
-        'message' => 'Checkout berhasil! Pesanan Anda telah dibuat. Nomor meja Anda adalah ' . $table_number
+        'message' => "Checkout berhasil! Pesanan Anda telah dibuat. Nomor meja Anda adalah $table_number"
     ];
 
-    // Log keberhasilan checkout
-    write_log("User '$username' berhasil melakukan checkout dengan ID pemesanan: $pemesanan_id dan nomor meja: $table_number", 'INFO');
+    // Log keberhasilan
+    write_log("User '$username' berhasil checkout dengan ID pemesanan: $pemesanan_id dan nomor meja: $table_number", 'INFO');
 
     // Arahkan ke halaman konfirmasi pesanan
     header("Location: ./order_confirmation.php");
     exit;
 } catch (Exception $e) {
-    // Jika ada kesalahan, rollback transaksi
+    // **8. Rollback jika terjadi error**
     $connection->rollback();
 
-    // Log kesalahan yang terjadi
+    // Log kesalahan
     write_log("Checkout gagal untuk user '$username': " . $e->getMessage(), 'ERROR');
 
-    // Simpan pesan kesalahan dalam session
+    // Simpan pesan error ke sesi
     $_SESSION['info'] = [
         'status' => 'danger',
         'message' => 'Terjadi kesalahan saat checkout: ' . $e->getMessage()
     ];
 
-    // Arahkan kembali ke halaman dashboard user
+    // Arahkan kembali ke dashboard
     header("Location: ../dashboard/user_dashboard.php");
     exit;
 }

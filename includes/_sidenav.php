@@ -11,6 +11,9 @@
     <ul class="sidebar-menu">
       <li class="menu-header">Dashboard</li>
       <li><a class="nav-link" href="../"><i class="fas fa-fire"></i> <span>Home</span></a></li>
+      <?php if ($_SESSION['login']['role'] === 'user') : ?>
+        <li><a class="nav-link" href="../dashboard/Keranjang.php"><i class="fas fa-shopping-cart"></i> <span>Keranjang</span></a></li>
+      <?php endif; ?>
       <?php if ($_SESSION['login']['role'] === 'admin') : ?>
         <li class="menu-header">Main Feature</li>
         <li class="dropdown">

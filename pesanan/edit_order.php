@@ -1,26 +1,31 @@
 <?php
+// Memuat file helper dan konfigurasi
 require_once '../includes/_top.php';
 require_once '../helper/connection.php';
 require_once '../helper/auth.php';
-require_once '../helper/logger.php'; // Tambahkan logger
+require_once '../helper/logger.php';
 
+// Memeriksa apakah pengguna adalah admin
 checkAdmin();
 
 // Mendapatkan ID pemesanan dari URL
 $order_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 // Pesan kesalahan atau status
-$errors = $_SESSION['errors'] ?? [];
-$old = $_SESSION['old'] ?? [];
-$info = $_SESSION['info'] ?? null;
+$errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
+$info = isset($_SESSION['info']) ? $_SESSION['info'] : null;
 
 if ($info) {
     $status = $info['status'];
-    $message = is_array($info['message']) ? implode(' | ', $info['message']) : $info['message'];
+    $message = $info['message'];
+
+    if (is_array($message)) {
+        $message = implode(' | ', $message);
+    }
 
     echo "<script>
         document.addEventListener('DOMContentLoaded', function() {
-            iziToast." . ($status === 'success' ? 'success' : 'error') . "({
+            iziToast." . ($status === 'success' ? 'success' : 'error') . "( {
                 title: '" . ($status === 'success' ? 'Sukses' : 'Gagal') . "',
                 message: '{$message}',
                 position: 'topCenter',
@@ -31,6 +36,7 @@ if ($info) {
 
     unset($_SESSION['info']);
 }
+unset($_SESSION['errors']);
 
 // Validasi ID pesanan
 if ($order_id <= 0) {
@@ -49,6 +55,38 @@ $order = $stmt->get_result()->fetch_assoc();
 if (!$order) {
     $_SESSION['info'] = ['status' => 'error', 'message' => 'Pesanan tidak ditemukan.'];
     header('Location: orders_dashboard.php');
+    exit;
+}
+
+// Menangani pembaruan status pesanan
+if (isset($_POST['submit'])) {
+    $status_baru = $_POST['status'] ?? $order['status'];
+    $total_harga_baru = $_POST['total_harga'] ?? $order['total_harga'];
+
+    // Log perubahan status dan total harga
+    $log_message = "Update Pesanan [id_order => $order_id, status => {$order['status']} => $status_baru, total_harga => {$order['total_harga']} => $total_harga_baru]";
+
+    if (!empty($status_baru) && is_numeric($total_harga_baru) && $total_harga_baru > 0) {
+        $update_order_query = "UPDATE pemesanan SET status = ?, total_harga = ? WHERE id = ?";
+        $stmt = $connection->prepare($update_order_query);
+        $stmt->bind_param("sdi", $status_baru, $total_harga_baru, $order_id);
+
+        if ($stmt->execute()) {
+            write_log($log_message, "SUCCESS");
+            $_SESSION['info'] = [
+                'status' => 'success',
+                'message' => "Pesanan berhasil diperbarui. $log_message"
+            ];
+        } else {
+            write_log("Gagal memperbarui pesanan.", "ERROR");
+            $_SESSION['info'] = ['status' => 'error', 'message' => 'Gagal memperbarui pesanan.'];
+        }
+    } else {
+        write_log("Validasi gagal untuk update pesanan.", "ERROR");
+        $_SESSION['info'] = ['status' => 'error', 'message' => 'Validasi data gagal.'];
+    }
+
+    header("Location: edit_order.php?id=$order_id");
     exit;
 }
 
@@ -72,8 +110,11 @@ if (isset($_POST['add_detail'])) {
             $stmt->bind_param("iiid", $order_id, $produk_id, $jumlah, $subtotal);
 
             if ($stmt->execute()) {
-                write_log("Detail pesanan berhasil ditambahkan [id_produk => $produk_id, jumlah => $jumlah, subtotal => $subtotal]", "SUCCESS");
-                $_SESSION['info'] = ['status' => 'success', 'message' => 'Detail pesanan berhasil ditambahkan.'];
+                write_log("Tambah Detail Pesanan [id_order => $order_id, id_produk => $produk_id, jumlah => $jumlah, subtotal => $subtotal]", "SUCCESS");
+                $_SESSION['info'] = [
+                    'status' => 'success',
+                    'message' => "Detail pesanan berhasil ditambahkan. [id_produk => $produk_id, jumlah => $jumlah, subtotal => $subtotal]"
+                ];
             } else {
                 write_log("Gagal menambahkan detail pesanan.", "ERROR");
                 $_SESSION['info'] = ['status' => 'error', 'message' => 'Gagal menambahkan detail pesanan.'];
@@ -94,16 +135,26 @@ if (isset($_POST['add_detail'])) {
 // Update detail pemesanan
 if (isset($_POST['update_detail'])) {
     $detail_id = $_POST['detail_id'] ?? null;
-    $jumlah = $_POST['jumlah'] ?? 0;
+    $jumlah_baru = $_POST['jumlah'] ?? 0;
 
-    if ($detail_id && $jumlah > 0) {
+    $detail_query = "SELECT jumlah FROM detail_pemesanan WHERE id = ?";
+    $stmt = $connection->prepare($detail_query);
+    $stmt->bind_param('i', $detail_id);
+    $stmt->execute();
+    $detail = $stmt->get_result()->fetch_assoc();
+
+    if ($detail_id && $jumlah_baru > 0) {
         $update_query = "UPDATE detail_pemesanan SET jumlah = ? WHERE id = ?";
         $stmt = $connection->prepare($update_query);
-        $stmt->bind_param("ii", $jumlah, $detail_id);
+        $stmt->bind_param("ii", $jumlah_baru, $detail_id);
 
         if ($stmt->execute()) {
-            write_log("Detail pesanan berhasil diperbarui [id_detail => $detail_id, jumlah => $jumlah]", "SUCCESS");
-            $_SESSION['info'] = ['status' => 'success', 'message' => 'Detail pesanan berhasil diperbarui.'];
+            $log_message = "Update Detail Pesanan [id_detail => $detail_id, jumlah => {$detail['jumlah']} => $jumlah_baru]";
+            write_log($log_message, "SUCCESS");
+            $_SESSION['info'] = [
+                'status' => 'success',
+                'message' => "Detail pesanan berhasil diperbarui. $log_message"
+            ];
         } else {
             write_log("Gagal memperbarui detail pesanan.", "ERROR");
             $_SESSION['info'] = ['status' => 'error', 'message' => 'Gagal memperbarui detail pesanan.'];
@@ -116,47 +167,16 @@ if (isset($_POST['update_detail'])) {
     header("Location: edit_order.php?id=$order_id");
     exit;
 }
-
-// Hapus detail pemesanan
-if (isset($_GET['cancel_detail'])) {
-    $detail_id = (int)$_GET['cancel_detail'];
-
-    $delete_query = "DELETE FROM detail_pemesanan WHERE id = ?";
-    $stmt = $connection->prepare($delete_query);
-    $stmt->bind_param("i", $detail_id);
-
-    if ($stmt->execute()) {
-        write_log("Detail pesanan berhasil dihapus [id_detail => $detail_id]", "SUCCESS");
-        $_SESSION['info'] = ['status' => 'success', 'message' => 'Detail pesanan berhasil dihapus.'];
-    } else {
-        write_log("Gagal menghapus detail pesanan.", "ERROR");
-        $_SESSION['info'] = ['status' => 'error', 'message' => 'Gagal menghapus detail pesanan.'];
-    }
-
-    header("Location: edit_order.php?id=$order_id");
-    exit;
-}
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Pesanan</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
-</head>
-
-<body>
+<section class="section">
     <div class="container my-4">
         <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="section-header d-flex justify-content-between">
             <h1>Edit Pesanan #<?= $order['id'] ?></h1>
             <a href="orders_dashboard.php" class="btn btn-secondary">Kembali</a>
         </div>
+
 
         <!-- Form Edit Pemesanan -->
         <form method="post" action="">
@@ -305,6 +325,6 @@ if (isset($_GET['cancel_detail'])) {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+</section>
 
-</html>
+<?php require_once '../includes/_bottom.php'; ?>

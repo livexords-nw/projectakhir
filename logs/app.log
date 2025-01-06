@@ -702,3 +702,262 @@
 [2024-12-10 10:14:57] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 107] - Detail pesanan berhasil diperbarui [id_detail => 14, jumlah => 100]
 [2024-12-10 10:15:23] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 129] - Detail pesanan berhasil dihapus [id_detail => 14]
 [2024-12-10 10:15:43] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2024-12-13 07:07:24] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2024-12-13 07:07:24] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2024-12-13 07:07:48] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2024-12-13 07:08:08] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2024-12-13 07:11:44] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\logout.php] [Line: 7] - User 'admin' melakukan logout.
+[2024-12-13 07:11:56] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'fauzan' (Role: 'user') berhasil login.
+[2024-12-13 07:11:57] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2024-12-13 07:12:11] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2024-12-13 07:12:17] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2024-12-13 07:12:29] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 10 unit produk 'yes' ke keranjang.
+[2024-12-13 07:12:29] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2024-12-13 07:12:42] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 30 unit produk 'test02' ke keranjang.
+[2024-12-13 07:12:42] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2024-12-13 07:13:23] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\update_cart.php] [Line: 61] - User 'fauzan' mengupdate jumlah produk: yes (ID: 25, Jumlah: 10 → 10), test02 (ID: 31, Jumlah: 30 → 30).
+[2024-12-13 07:13:23] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2024-12-13 07:13:33] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\update_cart.php] [Line: 61] - User 'fauzan' mengupdate jumlah produk: yes (ID: 25, Jumlah: 10 → 1100), test02 (ID: 31, Jumlah: 30 → 30).
+[2024-12-13 07:13:33] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2024-12-13 07:13:41] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\produk\checkout.php] [Line: 103] - User 'fauzan' berhasil melakukan checkout dengan ID pemesanan: 26 dan nomor meja: T6
+[2024-12-13 07:13:49] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2024-12-13 07:13:55] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\logout.php] [Line: 7] - User 'fauzan' melakukan logout.
+[2024-12-13 07:14:18] [ERROR] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 33] - Percobaan login gagal untuk username 'admin'.
+[2024-12-13 07:14:27] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2024-12-13 07:14:27] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2024-12-13 07:14:56] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2024-12-13 07:15:17] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2024-12-13 07:15:50] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 129] - Detail pesanan berhasil dihapus [id_detail => 21]
+[2024-12-13 07:16:08] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 75] - Detail pesanan berhasil ditambahkan [id_produk => 29, jumlah => 10, subtotal => 10000]
+[2024-12-13 07:16:38] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2024-12-13 07:19:36] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\logout.php] [Line: 7] - User 'admin' melakukan logout.
+[2024-12-13 07:19:50] [ERROR] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 33] - Percobaan login gagal untuk username 'fauzan'.
+[2024-12-13 07:20:02] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'fauzan' (Role: 'user') berhasil login.
+[2024-12-13 07:20:02] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2024-12-13 07:20:23] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2024-12-13 07:20:27] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 1 unit produk 'yes' ke keranjang.
+[2024-12-13 07:20:27] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2024-12-13 07:20:58] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\update_cart.php] [Line: 61] - User 'fauzan' mengupdate jumlah produk: yes (ID: 25, Jumlah: 1 → 3).
+[2024-12-13 07:20:58] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2024-12-13 07:21:04] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\produk\checkout.php] [Line: 103] - User 'fauzan' berhasil melakukan checkout dengan ID pemesanan: 27 dan nomor meja: T6
+[2024-12-13 07:21:08] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:31:35] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2025-01-01 09:31:35] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-01 09:32:05] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\logout.php] [Line: 7] - User 'admin' melakukan logout.
+[2025-01-01 09:32:15] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'fauzan' (Role: 'user') berhasil login.
+[2025-01-01 09:32:15] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:32:31] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 1 unit produk 'yes' ke keranjang.
+[2025-01-01 09:32:31] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:32:37] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\produk\checkout.php] [Line: 103] - User 'fauzan' berhasil melakukan checkout dengan ID pemesanan: 28 dan nomor meja: T15
+[2025-01-01 09:32:41] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:40:06] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:40:50] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:41:01] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:41:18] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:45:19] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:50:20] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:50:28] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 10 unit produk 'yes' ke keranjang.
+[2025-01-01 09:50:28] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:50:49] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:51:11] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:51:23] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:51:31] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 100 unit produk 'test02' ke keranjang.
+[2025-01-01 09:51:32] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:51:37] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:51:44] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:51:50] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 100 unit produk 'latte' ke keranjang.
+[2025-01-01 09:51:50] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:51:58] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 10000 unit produk 'test02' ke keranjang.
+[2025-01-01 09:51:58] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:52:01] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:52:12] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\update_cart.php] [Line: 61] - User 'fauzan' mengupdate jumlah produk: yes (ID: 25, Jumlah: 10 → 10), test02 (ID: 31, Jumlah: 10100 → 100), latte (ID: 34, Jumlah: 100 → 100).
+[2025-01-01 09:52:12] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:53:48] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:53:52] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\remove_from_cart.php] [Line: 37] - User 'fauzan' menghapus produk 'latte' (ID: 34, Jumlah: 100) dari keranjang.
+[2025-01-01 09:53:52] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:55:01] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\update_cart.php] [Line: 61] - User 'fauzan' mengupdate jumlah produk: yes (ID: 25, Jumlah: 10 → 10), test02 (ID: 31, Jumlah: 100 → 100).
+[2025-01-01 09:55:01] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:56:45] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:56:52] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\update_cart.php] [Line: 61] - User 'fauzan' mengupdate jumlah produk: yes (ID: 25, Jumlah: 10 → 10), test02 (ID: 31, Jumlah: 100 → 100).
+[2025-01-01 09:56:52] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 09:57:04] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\update_cart.php] [Line: 61] - User 'fauzan' mengupdate jumlah produk: yes (ID: 25, Jumlah: 10 → 10), test02 (ID: 31, Jumlah: 100 → 100).
+[2025-01-01 09:57:04] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:02:16] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:04:04] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:04:59] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:06:23] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:06:29] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\update_cart.php] [Line: 61] - User 'fauzan' mengupdate jumlah produk: yes (ID: 25, Jumlah: 10 → 10), test02 (ID: 31, Jumlah: 100 → 100).
+[2025-01-01 10:06:29] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:09:32] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:10:51] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:11:48] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:12:07] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\update_cart.php] [Line: 61] - User 'fauzan' mengupdate jumlah produk: yes (ID: 25, Jumlah: 10 → 100), test02 (ID: 31, Jumlah: 100 → 100).
+[2025-01-01 10:12:07] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:12:15] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\remove_from_cart.php] [Line: 37] - User 'fauzan' menghapus produk 'test02' (ID: 31, Jumlah: 100) dari keranjang.
+[2025-01-01 10:12:15] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:14:25] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:14:40] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:14:48] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 1 unit produk 'test02' ke keranjang.
+[2025-01-01 10:14:48] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:14:51] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:14:58] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\remove_from_cart.php] [Line: 37] - User 'fauzan' menghapus produk 'test02' (ID: 31, Jumlah: 1) dari keranjang.
+[2025-01-01 10:14:58] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:15:04] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:15:13] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\logout.php] [Line: 7] - User 'fauzan' melakukan logout.
+[2025-01-01 10:15:21] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2025-01-01 10:15:21] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-01 10:15:39] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-01 10:18:00] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-01 10:19:13] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2025-01-01 10:19:13] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-01 10:19:43] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-01 10:19:51] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-01 10:20:41] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2025-01-01 10:20:41] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-01 10:20:56] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-01 10:26:21] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\logout.php] [Line: 7] - User 'admin' melakukan logout.
+[2025-01-01 10:26:28] [ERROR] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 33] - Percobaan login gagal untuk username 'user'.
+[2025-01-01 10:26:33] [ERROR] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 33] - Percobaan login gagal untuk username 'user01'.
+[2025-01-01 10:26:37] [ERROR] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 33] - Percobaan login gagal untuk username 'user1'.
+[2025-01-01 10:26:42] [ERROR] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 33] - Percobaan login gagal untuk username 'user1'.
+[2025-01-01 10:26:48] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'fauzan' (Role: 'user') berhasil login.
+[2025-01-01 10:26:48] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:28:38] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:29:02] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:30:53] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:31:58] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:33:00] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:33:13] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:34:45] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-01 10:34:49] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 08:46:50] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2025-01-06 08:46:50] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 08:47:10] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\logout.php] [Line: 7] - User 'admin' melakukan logout.
+[2025-01-06 08:47:15] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'fauzan' (Role: 'user') berhasil login.
+[2025-01-06 08:47:15] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 08:47:26] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 100 unit produk 'yes' ke keranjang.
+[2025-01-06 08:47:26] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 08:47:32] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 08:47:40] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\update_cart.php] [Line: 61] - User 'fauzan' mengupdate jumlah produk: yes (ID: 25, Jumlah: 100 → 101).
+[2025-01-06 08:47:40] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 08:47:44] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\produk\checkout.php] [Line: 103] - User 'fauzan' berhasil melakukan checkout dengan ID pemesanan: 29 dan nomor meja: T14
+[2025-01-06 08:47:48] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 08:47:51] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\logout.php] [Line: 7] - User 'fauzan' melakukan logout.
+[2025-01-06 08:47:54] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2025-01-06 08:47:54] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 08:48:01] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 08:48:47] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 08:48:51] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\complete_order.php] [Line: 72] - Admin 'admin' menyelesaikan pesanan #29 dan memperbarui jumlah terjual produk.
+[2025-01-06 08:48:51] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 08:49:00] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 08:49:48] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\produk\edit.php] [Line: 62] - admin membuka form Edit Produk.
+[2025-01-06 08:50:10] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\produk\update.php] [Line: 59] - Produk ID 19 berhasil diperbarui. Data: {"nama":"es oke 01 ","harga":"3000","stock":1} | Gambar: mountain-3.jpg
+[2025-01-06 08:52:59] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 13:54:01] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2025-01-06 13:54:02] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 13:54:13] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 18:21:50] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'fauzan' (Role: 'user') berhasil login.
+[2025-01-06 18:21:50] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 18:22:10] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 100 unit produk 'es oke 01 ' ke keranjang.
+[2025-01-06 18:22:10] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 18:22:14] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 18:22:21] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\produk\checkout.php] [Line: 85] - User 'fauzan' berhasil checkout dengan ID pemesanan: 30 dan nomor meja: T19
+[2025-01-06 18:22:24] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 18:23:06] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\logout.php] [Line: 7] - User 'fauzan' melakukan logout.
+[2025-01-06 18:23:12] [ERROR] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 33] - Percobaan login gagal untuk username 'admin'.
+[2025-01-06 18:23:19] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2025-01-06 18:23:19] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 18:23:28] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 18:23:52] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 18:49:45] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2025-01-06 18:49:45] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 18:49:53] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 18:50:04] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 46] - Pesanan berhasil diperbarui [id_order => 30, status => completed, total_harga => 300000.00]
+[2025-01-06 18:50:08] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 18:54:57] [ERROR] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 134] - Validasi gagal untuk update pesanan. Status atau total harga tidak valid.
+[2025-01-06 18:55:06] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 46] - Pesanan berhasil diperbarui [id_order => 28, status => completed, total_harga => 2000.00]
+[2025-01-06 18:55:06] [ERROR] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 134] - Validasi gagal untuk update pesanan. Status atau total harga tidak valid.
+[2025-01-06 18:55:09] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 18:55:37] [ERROR] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 134] - Validasi gagal untuk update pesanan. Status atau total harga tidak valid.
+[2025-01-06 18:55:41] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 46] - Pesanan berhasil diperbarui [id_order => 26, status => canceled, total_harga => 2800000.00]
+[2025-01-06 18:55:41] [ERROR] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 134] - Validasi gagal untuk update pesanan. Status atau total harga tidak valid.
+[2025-01-06 18:56:11] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 18:56:16] [ERROR] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 134] - Validasi gagal untuk update pesanan. Status atau total harga tidak valid.
+[2025-01-06 18:56:20] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 46] - Pesanan berhasil diperbarui [id_order => 27, status => canceled, total_harga => 6000.00]
+[2025-01-06 18:56:20] [ERROR] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 134] - Validasi gagal untuk update pesanan. Status atau total harga tidak valid.
+[2025-01-06 18:56:23] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 19:39:21] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 19:39:37] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 68] - Pesanan berhasil diperbarui [id_order => 24, status => canceled, total_harga => 300000.00]
+[2025-01-06 19:40:24] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 19:45:03] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\logout.php] [Line: 7] - User 'admin' melakukan logout.
+[2025-01-06 19:45:13] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'fauzan' (Role: 'user') berhasil login.
+[2025-01-06 19:45:13] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 19:46:37] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 19:46:46] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 19:46:49] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 19:46:53] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 19:46:57] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 1 unit produk 'es oke 01 ' ke keranjang.
+[2025-01-06 19:46:57] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 19:47:00] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 19:47:07] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\produk\checkout.php] [Line: 85] - User 'fauzan' berhasil checkout dengan ID pemesanan: 31 dan nomor meja: T20
+[2025-01-06 19:47:11] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 19:47:16] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 1 unit produk 'es oke 01 ' ke keranjang.
+[2025-01-06 19:47:16] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 19:47:18] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 19:47:26] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\logout.php] [Line: 7] - User 'fauzan' melakukan logout.
+[2025-01-06 19:47:29] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2025-01-06 19:47:29] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 19:47:37] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 19:48:03] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 19:50:37] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 19:50:53] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 68] - Pesanan berhasil diperbarui [id_order => 31, status => canceled, total_harga => 3000.00]
+[2025-01-06 19:50:53] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 68] - Pesanan berhasil diperbarui [id_order => 31, status => canceled, total_harga => 3000.00]
+[2025-01-06 19:50:56] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 20:31:06] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2025-01-06 20:31:07] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 20:31:14] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 20:31:24] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 20:35:37] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 20:36:41] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\logout.php] [Line: 7] - User 'admin' melakukan logout.
+[2025-01-06 20:36:51] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'fauzan' (Role: 'user') berhasil login.
+[2025-01-06 20:36:51] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 20:39:26] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 20:44:40] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 14] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 20:44:44] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 14] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 20:46:28] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 20:47:04] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 100 unit produk 'test02' ke keranjang.
+[2025-01-06 20:47:04] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 20:48:16] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 20:48:19] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 1 unit produk 'es oke 01 ' ke keranjang.
+[2025-01-06 20:48:19] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 20:50:04] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 20:50:06] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\cart\add_to_cart.php] [Line: 71] - User 'fauzan' menambahkan 1 unit produk 'es oke 01 ' ke keranjang.
+[2025-01-06 20:50:06] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 20:50:11] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\keranjang.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 20:51:49] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\produk\checkout.php] [Line: 85] - User 'fauzan' berhasil checkout dengan ID pemesanan: 32 dan nomor meja: T3
+[2025-01-06 20:51:51] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\user_dashboard.php] [Line: 11] - User 'fauzan' mengakses halaman dashboard.
+[2025-01-06 20:51:53] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\logout.php] [Line: 7] - User 'fauzan' melakukan logout.
+[2025-01-06 20:51:57] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2025-01-06 20:51:57] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 20:52:02] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 20:52:13] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 133] - Detail pesanan berhasil diperbarui [id_detail => 29, jumlah => 10]
+[2025-01-06 20:52:54] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 133] - Detail pesanan berhasil diperbarui [id_detail => 29, jumlah => 10]
+[2025-01-06 20:53:02] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 133] - Detail pesanan berhasil diperbarui [id_detail => 29, jumlah => 100]
+[2025-01-06 20:54:01] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 137] - Detail pesanan berhasil diperbarui [id_detail => 29, jumlah => 100]
+[2025-01-06 20:56:16] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 138] - Detail pesanan berhasil diperbarui [id_detail => 29, jumlah => 100]
+[2025-01-06 20:56:44] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 139] - Detail pesanan berhasil diperbarui [id_detail => 29, jumlah => 100]
+[2025-01-06 20:57:19] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 140] - Detail pesanan berhasil diperbarui [id_detail => 29, jumlah => 100]
+[2025-01-06 20:58:20] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 140] - Detail pesanan berhasil diperbarui [id_detail => 29, jumlah => 100]
+[2025-01-06 20:58:43] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 137] - Detail pesanan berhasil diperbarui [id_detail => 29, jumlah => 100]
+[2025-01-06 20:58:53] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 72] - Pesanan berhasil diperbarui [id_order => 32, status => canceled, total_harga => 2006000.00]
+[2025-01-06 21:00:45] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 137] - Detail pesanan berhasil diperbarui [id_detail => 29, jumlah => 100]
+[2025-01-06 21:00:50] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 137] - Detail pesanan berhasil diperbarui [id_detail => 29, jumlah => 100]
+[2025-01-06 21:01:14] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 137] - Detail pesanan berhasil diperbarui [id_detail => 29, jumlah => 100]
+[2025-01-06 21:03:49] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 153] - Update Detail Pesanan [id_detail => 29, jumlah => 100 => 100]
+[2025-01-06 21:04:03] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 113] - Tambah Detail Pesanan [id_order => 32, id_produk => 32, jumlah => 10, subtotal => 20000]
+[2025-01-06 21:04:22] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 113] - Tambah Detail Pesanan [id_order => 32, id_produk => 23, jumlah => 10, subtotal => 20000]
+[2025-01-06 21:04:31] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\edit_order.php] [Line: 75] - Update Pesanan [id_order => 32, status => canceled => canceled, total_harga => 2006000.00 => 2006000.00]
+[2025-01-06 21:04:33] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 21:10:14] [SUCCESS] [File: C:\xampp\htdocs\projectakhir_esteh\login.php] [Line: 21] - User 'admin' (Role: 'admin') berhasil login.
+[2025-01-06 21:10:15] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\dashboard\admin_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.
+[2025-01-06 21:10:21] [INFO] [File: C:\xampp\htdocs\projectakhir_esteh\pesanan\orders_dashboard.php] [Line: 13] - Admin 'admin' mengakses halaman dashboard.

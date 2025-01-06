@@ -69,5 +69,5 @@ if (isset($_GET['id'])) {
 }
 
 // Redirect kembali ke halaman dashboard
-header("Location: ../user_dashboard.php");
+header("Location: ../keranjang.php");
 exit;

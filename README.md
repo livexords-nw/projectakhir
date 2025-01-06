@@ -14,11 +14,10 @@ Aplikasi berbasis web sederhana menggunakan PHP native dengan CSS Bootstrap dan 
 4. **UI/UX**:
    - Responsif dengan Bootstrap.
 
-## **Versi Terbaru (1.3.3)**
+## **Versi Terbaru (1.3.4)**
 
-- Penambahan sistem manajemen pesanan
-- Membenahi beberapa bug
-- Menambahi beberapa logger agar lebih jelas
+- Memperbaiki page user_dashboard, keranjang, pesanan, edit_pesanan
+- Memperbaiki sistem pesanan, edit pesanan
 
 ## **Struktur Folder**
 
