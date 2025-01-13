@@ -8,7 +8,6 @@ isLogin();
 
 if (isset($_SESSION['login']['username'])) {
     $username = $_SESSION['login']['username'];
-    write_log("User '$username' mengakses halaman dashboard.", 'INFO');
 }
 
 $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];

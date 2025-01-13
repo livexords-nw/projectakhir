@@ -16,14 +16,12 @@ class Produk
     {
         // Validasi ID
         if (!$id || !is_numeric($id)) {
-            write_log("Validasi gagal: ID produk tidak valid (ID: {$id}).", 'ERROR');
             throw new Exception('ID produk tidak valid.');
         }
 
         // Ambil data produk
         $produk = $this->getProdukById($id);
         if (!$produk) {
-            write_log("Produk tidak ditemukan: ID ({$id}) tidak ada.", 'ERROR');
             throw new Exception('Data produk tidak ditemukan.');
         }
 
@@ -35,8 +33,6 @@ class Produk
         $stmt->bind_param("i", $id);
 
         if ($stmt->execute() && $stmt->affected_rows > 0) {
-            // Log keberhasilan penghapusan produk
-            write_log("Produk ID {$id} berhasil dihapus. Nama: {$produk['nama']}", 'SUCCESS');
 
             // Menyimpan pesan sukses dengan detail nama produk
             $_SESSION['info'] = [
@@ -45,7 +41,6 @@ class Produk
             ];
             return true;
         } else {
-            write_log("Gagal menghapus produk ID {$id}. Error: " . $stmt->error, 'ERROR');
             throw new Exception('Gagal menghapus data produk.');
         }
     }
@@ -63,7 +58,6 @@ class Produk
         $filePath = "../uploads/" . $filename;
         if (file_exists($filePath) && is_file($filePath)) {
             if (!unlink($filePath)) {
-                write_log("Gagal menghapus file gambar: {$filename}", 'ERROR');
                 throw new Exception('Gagal menghapus file gambar: ' . $filename);
             }
         }
@@ -81,7 +75,6 @@ try {
         'status' => 'danger',
         'message' => $e->getMessage()
     ];
-    write_log("Error menghapus produk: " . $e->getMessage(), 'ERROR');
 }
 
 header('Location: ./index.php');

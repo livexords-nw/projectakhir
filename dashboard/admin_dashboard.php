@@ -7,14 +7,6 @@ require_once '../helper/logger.php';
 // Pastikan hanya admin yang dapat mengakses halaman ini
 checkAdmin();
 
-// Log aktivitas admin
-if (isset($_SESSION['login']['username'])) {
-  $username = $_SESSION['login']['username'];
-  write_log("Admin '$username' mengakses halaman dashboard.");
-} else {
-  write_log("Akses dashboard tanpa sesi login.");
-}
-
 $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
 $info = isset($_SESSION['info']) ? $_SESSION['info'] : null;
 
@@ -90,6 +82,15 @@ foreach ($produk_stok as $item) {
 }
 ?>
 
+<head>
+  <style>
+    .card-body {
+      white-space: nowrap;
+      overflow: hidden;
+      /* text-overflow: ellipsis; */
+    }
+  </style>
+</head>
 <section class="section">
   <div class="section-header">
     <h1>Admin Dashboard</h1>
@@ -111,7 +112,7 @@ foreach ($produk_stok as $item) {
             <h4>Total Produk</h4>
           </div>
           <div class="card-body">
-            <?= $total_produk ?>
+            <?= number_format($total_produk, 0, ',', '.') ?>
           </div>
         </div>
       </div>
@@ -149,7 +150,7 @@ foreach ($produk_stok as $item) {
   </div>
 
   <!-- Grafik Produk per Jumlah Terjual -->
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-12">
       <div class="card">
         <div class="card-header">
@@ -160,7 +161,7 @@ foreach ($produk_stok as $item) {
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- produk terlaris -->
   <section class="section">
@@ -183,19 +184,19 @@ foreach ($produk_stok as $item) {
     </div>
 
     <!-- List Produk -->
-    <div class="row">
+    <div id="product-list" class="row">
       <?php
       $items_per_page = isset($_GET['limit']) ? (int)$_GET['limit'] : 10; // Default 10 items
       $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
       $offset = ($page - 1) * $items_per_page;
 
       $query = "
-        SELECT nama, jumlah_terjual, harga, gambar
-        FROM produk
-        WHERE jumlah_terjual > 0 AND jumlah_terjual IS NOT NULL
-        ORDER BY jumlah_terjual DESC
-        LIMIT $items_per_page OFFSET $offset
-    ";
+    SELECT nama, jumlah_terjual, harga, gambar
+    FROM produk
+    WHERE jumlah_terjual > 0 AND jumlah_terjual IS NOT NULL
+    ORDER BY jumlah_terjual DESC
+    LIMIT $items_per_page OFFSET $offset
+  ";
       $result = $connection->query($query);
 
       $rank = $offset + 1;
@@ -203,9 +204,9 @@ foreach ($produk_stok as $item) {
 
       <?php if ($result && $result->num_rows > 0): ?>
         <?php while ($produk = $result->fetch_assoc()): ?>
-          <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-            <div class="card shadow-sm h-100">
-              <img src="<?= '../uploads/' . htmlspecialchars($produk['gambar']) ?>" class="card-img-top" alt="<?= htmlspecialchars($produk['nama']) ?>">
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100">
+              <img src="<?= '../uploads/' . htmlspecialchars($produk['gambar']) ?>" class="card-img-top" alt="<?= htmlspecialchars($produk['nama']) ?>" style="height: 200px; object-fit: cover;">
               <div class="card-body">
                 <h5 class="card-title">#<?= $rank++ ?> <?= htmlspecialchars($produk['nama']) ?></h5>
                 <p class="card-text">
@@ -218,10 +219,11 @@ foreach ($produk_stok as $item) {
         <?php endwhile; ?>
       <?php else: ?>
         <div class="col-12">
-          <div class="alert alert-info">Tidak ada produk terlaris.</div>
+          <div class="alert alert-info text-center">Tidak ada produk terlaris.</div>
         </div>
       <?php endif; ?>
     </div>
+
 
     <!-- Pagination -->
     <div class="row">

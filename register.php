@@ -1,7 +1,101 @@
 <?php
 session_start();
 require_once 'helper/connection.php';
-require_once 'helper/logger.php';
+
+// Include PHPMailer
+require 'libs/PHPMailer/src/PHPMailer.php';
+require 'libs/PHPMailer/src/SMTP.php';
+require 'libs/PHPMailer/src/Exception.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Fungsi untuk mengirim email OTP
+function sendOtpEmail($email, $otp, $verificationLink, $username)
+{
+  $mail = new PHPMailer(true);
+
+  try {
+    // Konfigurasi SMTP
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = ''; // Ganti dengan email Anda
+    $mail->Password = ''; // Ganti dengan App Password Gmail Anda
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = 587;
+
+    // Pengirim dan penerima
+    $mail->setFrom('', 'Tea Bliss');
+    $mail->addAddress($email);
+
+    // Isi email
+    $mail->isHTML(true);
+    $mail->Subject = $username;
+    $mail->Body = "
+            <div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>
+                <div style='text-align: center;'>
+                    <img src='https://raw.githubusercontent.com/livexords-nw/projectakhir/main/assets/img/avatar/Tea_Bliss_logo.png' alt='Tea Bliss Logo' style='width: 200px;'>
+                    <p style='color: #555;'>Kode OTP Anda:</p>
+                    <h2 style='color: #4CAF50;'>$otp</h2>
+                </div>
+                <div style='text-align: center; margin-top: 30px;'>
+                    <a href='$verificationLink' style='background-color: #4CAF50; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-size: 14px;'>Verifikasi Akun Anda</a>
+                </div>
+                <p style='text-align: center; font-size: 14px; color: #555;'>Kode ini hanya berlaku selama 5 menit. Jika Anda tidak meminta kode ini, abaikan email ini.</p>
+            </div>";
+    $mail->AltBody = "Kode OTP Anda adalah: $otp\nKode ini hanya berlaku selama 5 menit.";
+
+    $mail->send();
+    return true;
+  } catch (Exception $e) {
+    error_log("Email gagal dikirim. Error: {$mail->ErrorInfo}");
+    return false;
+  }
+}
+
+// Fungsi untuk memvalidasi input registrasi
+function validateInput($username, $password, $repeatPassword, $email, $connection)
+{
+  if (empty($username) || empty($password) || empty($repeatPassword) || empty($email)) {
+    return 'Semua field harus diisi dengan lengkap!';
+  }
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    return 'Alamat email tidak valid!';
+  }
+  if ($password !== $repeatPassword) {
+    return 'Password tidak cocok!';
+  }
+  if (strlen($password) < 6) {
+    return 'Password minimal 6 karakter!';
+  }
+
+  // Cek apakah username atau email sudah terdaftar
+  $checkUserQuery = "SELECT id FROM users WHERE username = ?";
+  $stmtUser = mysqli_prepare($connection, $checkUserQuery);
+  mysqli_stmt_bind_param($stmtUser, 's', $username);
+  mysqli_stmt_execute($stmtUser);
+  mysqli_stmt_store_result($stmtUser);
+
+  if (mysqli_stmt_num_rows($stmtUser) > 0) {
+    return 'Username sudah terdaftar!';
+  }
+
+  $checkEmailQuery = "SELECT id FROM users WHERE email = ?";
+  $stmtEmail = mysqli_prepare($connection, $checkEmailQuery);
+  mysqli_stmt_bind_param($stmtEmail, 's', $email);
+  mysqli_stmt_execute($stmtEmail);
+  mysqli_stmt_store_result($stmtEmail);
+
+  if (mysqli_stmt_num_rows($stmtEmail) > 0) {
+    return 'Email sudah terdaftar!';
+  }
+
+  mysqli_stmt_close($stmtUser);
+  mysqli_stmt_close($stmtEmail);
+
+  return null; // Tidak ada error
+}
 
 if (isset($_POST['submit'])) {
   $username = trim($_POST['username']);
@@ -9,69 +103,48 @@ if (isset($_POST['submit'])) {
   $repeatPassword = trim($_POST['repeat_password']);
   $email = trim($_POST['email']);
 
-  if (empty($username) || empty($password) || empty($repeatPassword) || empty($email)) {
-    $_SESSION['info'] = [
-      'status' => 'danger',
-      'message' => 'Semua field harus diisi!'
-    ];
-  } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $_SESSION['info'] = [
-      'status' => 'danger',
-      'message' => 'Format email tidak valid!'
-    ];
-  } elseif ($password !== $repeatPassword) {
-    $_SESSION['info'] = [
-      'status' => 'danger',
-      'message' => 'Password dan Repeat Password tidak cocok!'
-    ];
-  } elseif (strlen($password) < 6) {
-    $_SESSION['info'] = [
-      'status' => 'danger',
-      'message' => 'Password minimal 6 karakter!'
-    ];
-  } else {
+  // Validasi input
+  $validationError = validateInput($username, $password, $repeatPassword, $email, $connection);
+  if ($validationError) {
+    $_SESSION['info'] = ['status' => 'danger', 'message' => $validationError];
+    header("Location: register.php");
+    exit;
+  }
+
+  // Generate OTP dan Token
+  $otp = rand(100000, 999999);
+  $token = bin2hex(random_bytes(16));
+  $otpCreatedAt = date('Y-m-d H:i:s');
+
+  $verificationLink = "http://localhost/projectakhir_esteh/verify_otp.php?token=$token";
+
+  // Kirim OTP
+  if (sendOtpEmail($email, $otp, $verificationLink,  $_POST['username'])) {
+    // Simpan data ke database
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    $insertQuery = "INSERT INTO users (username, password, email, role, otp_code, token, otp_created_at) VALUES (?, ?, ?, 'user', ?, ?, ?)";
+    $stmtInsert = mysqli_prepare($connection, $insertQuery);
+    mysqli_stmt_bind_param($stmtInsert, 'ssssss', $username, $hashedPassword, $email, $otp, $token, $otpCreatedAt);
 
-    $checkUserQuery = "SELECT id FROM users WHERE username = ?";
-    $stmt = mysqli_prepare($connection, $checkUserQuery);
-    mysqli_stmt_bind_param($stmt, 's', $username);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_store_result($stmt);
-
-    if (mysqli_stmt_num_rows($stmt) > 0) {
+    if (mysqli_stmt_execute($stmtInsert)) {
       $_SESSION['info'] = [
-        'status' => 'danger',
-        'message' => 'Username sudah digunakan, silakan pilih username lain!'
+        'status' => 'success',
+        'message' => 'Kode OTP telah dikirim ke email Anda. Klik link di email untuk menyelesaikan proses verifikasi akun Anda.'
       ];
-      write_log("Gagal registrasi: Username '$username' sudah digunakan.", 'INFO');
+      header("Location: register.php");
+      exit;
     } else {
-      $insertQuery = "INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, 'user')";
-      $stmt = mysqli_prepare($connection, $insertQuery);
-      mysqli_stmt_bind_param($stmt, 'sss', $username, $hashedPassword, $email);
-
-      if (mysqli_stmt_execute($stmt)) {
-        $_SESSION['info'] = [
-          'status' => 'success',
-          'message' => 'Registrasi berhasil! Silakan login.'
-        ];
-        write_log("User '$username' berhasil registrasi.");
-        header("Location: login.php");
-        exit;
-      } else {
-        $_SESSION['info'] = [
-          'status' => 'danger',
-          'message' => 'Terjadi kesalahan, silakan coba lagi!'
-        ];
-        write_log("Gagal registrasi: Kesalahan saat menyimpan data pengguna.", 'ERROR');
-      }
+      $_SESSION['info'] = ['status' => 'danger', 'message' => 'Terjadi kesalahan saat menyimpan data!'];
     }
-
-    mysqli_stmt_close($stmt);
+    mysqli_stmt_close($stmtInsert);
+  } else {
+    $_SESSION['info'] = ['status' => 'danger', 'message' => 'Gagal mengirim OTP. Coba lagi nanti!'];
   }
 }
 
-$info = isset($_SESSION['info']) ? $_SESSION['info'] : null;
-if ($info) {
+// iziToast Notifikasi
+if (isset($_SESSION['info'])) {
+  $info = $_SESSION['info'];
   $status = $info['status'];
   $message = $info['message'];
 
@@ -105,6 +178,15 @@ if ($info) {
   <!-- Template CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/components.css">
+
+  <!-- Link Logo -->
+  <link rel="icon" href="assets/img/favicon_io/Tea_Bliss_logo-32x32.png" type="image/x-icon">
+
+  <!-- iziToast CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
+
+  <!-- iziToast JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
 </head>
 
 <body>
@@ -114,7 +196,7 @@ if ($info) {
         <div class="row">
           <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
             <div class="login-brand text-center mb-4">
-              <img src="./assets/img/avatar/Tea_Bliss_logo.png" alt="logo" class="img-fluid" style="max-width: 150px; height: auto;">
+              <img src="./assets/img/Tea_Bliss_logo.png" alt="logo" class="img-fluid" style="max-width: 150px; height: auto;">
             </div>
             <div class="card card-primary">
               <div class="card-header">
@@ -200,8 +282,22 @@ if ($info) {
       }
     });
 
-    // Validate password and repeat password
+    // Validate email format before form submission
     document.querySelector('form').addEventListener('submit', function(event) {
+      const email = document.getElementById('email').value;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailRegex.test(email)) {
+        event.preventDefault();
+        iziToast.error({
+          title: 'Gagal',
+          message: 'Format email tidak valid!',
+          position: 'topCenter',
+          timeout: 5000
+        });
+        return;
+      }
+
       const password = document.getElementById('password').value;
       const repeatPassword = document.getElementById('repeat_password').value;
 
@@ -217,5 +313,9 @@ if ($info) {
     });
   </script>
 </body>
+
+<?php
+require_once 'includes/_bottom.php';
+?>
 
 </html>

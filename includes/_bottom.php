@@ -1,9 +1,9 @@
 </div>
 <footer class="main-footer">
   <div class="footer-left">
+    &copy; <?= date('Y') ?> Habib. All rights reserved.
   </div>
   <div class="footer-right">
-
   </div>
 </footer>
 </div>
@@ -39,3 +39,14 @@
 </body>
 
 </html>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const sidebar = document.getElementById("sidebar-wrapper");
+    const toggleButton = document.querySelector("[data-toggle='sidebar']"); // Gunakan query selector yang sesuai
+
+    toggleButton.addEventListener("click", function() {
+      sidebar.classList.toggle("sidebar-collapsed");
+    });
+  });
+</script>

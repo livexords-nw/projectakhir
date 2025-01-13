@@ -10,9 +10,6 @@ checkAdmin();
 // Log aktivitas admin
 if (isset($_SESSION['login']['username'])) {
   $username = $_SESSION['login']['username'];
-  write_log("Admin '$username' mengakses halaman dashboard.");
-} else {
-  write_log("Akses dashboard tanpa sesi login.");
 }
 
 $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
@@ -72,6 +69,19 @@ $pesanan_semua_result = $connection->query("
 ");
 $pesanan_semua = $pesanan_semua_result ? $pesanan_semua_result->fetch_all(MYSQLI_ASSOC) : [];
 
+function getStatusClass($status)
+{
+  switch ($status) {
+    case 'pending':
+      return 'badge bg-warning text-light';
+    case 'completed':
+      return 'badge bg-success text-light';
+    case 'canceled':
+      return 'badge bg-danger text-light';
+    default:
+      return 'badge bg-secondary text-light';
+  }
+}
 ?>
 
 <section class="section">
@@ -87,8 +97,8 @@ $pesanan_semua = $pesanan_semua_result ? $pesanan_semua_result->fetch_all(MYSQLI
   <div class="row mb-4">
     <div class="col-lg-4 col-md-6 col-sm-6 col-12">
       <div class="card card-statistic-1">
-        <div class="card-icon bg-primary">
-          <i class="fas fa-box"></i>
+        <div class="card-icon bg-warning">
+          <i class="fas fa-hourglass-half"></i>
         </div>
         <div class="card-wrap">
           <div class="card-header">
@@ -117,8 +127,8 @@ $pesanan_semua = $pesanan_semua_result ? $pesanan_semua_result->fetch_all(MYSQLI
     </div>
     <div class="col-lg-4 col-md-6 col-sm-6 col-12">
       <div class="card card-statistic-1">
-        <div class="card-icon bg-success">
-          <i class="fas fa-check-circle"></i>
+        <div class="card-icon bg-danger">
+          <i class="fas fa-times-circle"></i>
         </div>
         <div class="card-wrap">
           <div class="card-header">
@@ -126,6 +136,21 @@ $pesanan_semua = $pesanan_semua_result ? $pesanan_semua_result->fetch_all(MYSQLI
           </div>
           <div class="card-body">
             <?= count($pesanan_canceled) ?>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-6 col-12 mx-auto">
+      <div class="card card-statistic-1">
+        <div class="card-icon bg-info">
+          <i class="fas fa-clipboard-list"></i>
+        </div>
+        <div class="card-wrap">
+          <div class="card-header">
+            <h4>Total Pesanan</h4>
+          </div>
+          <div class="card-body">
+            <?= count($pesanan_semua) ?>
           </div>
         </div>
       </div>
@@ -145,11 +170,7 @@ $pesanan_semua = $pesanan_semua_result ? $pesanan_semua_result->fetch_all(MYSQLI
                 <p><strong>Tanggal:</strong> <?= date('d M Y H:i', strtotime($pesanan['tanggal_pemesanan'])) ?></p>
                 <p><strong>Total:</strong> Rp <?= number_format($pesanan['total_harga'], 0, ',', '.') ?></p>
                 <div class="d-flex justify-content-between">
-                  <form method="post" action="complete_order.php">
-                    <input type="hidden" name="order_id" value="<?= $pesanan['id'] ?>">
-                    <button type="submit" class="btn btn-success btn-sm">Pesanan Selesai</button>
-                  </form>
-                  <a href="edit_order.php?id=<?= $pesanan['id'] ?>" class="btn btn-primary btn-sm">Edit</a>
+                  <a href="tinjau_order.php?id=<?= $pesanan['id'] ?>" class="btn btn-primary btn-sm">Tinjau Pesanan</a>
                 </div>
               </div>
             </div>
@@ -163,10 +184,10 @@ $pesanan_semua = $pesanan_semua_result ? $pesanan_semua_result->fetch_all(MYSQLI
     </div>
   </section>
 
-  <!-- Sejarah pesanan -->
+  <!-- Sejarah Pesanan -->
   <section>
     <h1>Sejarah Pesanan</h1>
-    <div class="form-group">
+    <div class="form-group mb-3">
       <input type="text" id="searchInput" class="form-control" placeholder="Cari pesanan berdasarkan ID, nama pemesan, atau status...">
     </div>
     <div class="row" id="orderHistory">
@@ -176,9 +197,23 @@ $pesanan_semua = $pesanan_semua_result ? $pesanan_semua_result->fetch_all(MYSQLI
             <div class="card shadow-sm h-100">
               <div class="card-body">
                 <h5>#<?= $pesanan['id'] ?> - <?= htmlspecialchars($pesanan['nama_pemesan']) ?></h5>
-                <p><strong>Status:</strong> <?= ucfirst($pesanan['status']) ?></p>
+                <p><strong>Status:</strong>
+                  <span class="<?= getStatusClass($pesanan['status']) ?>">
+                    <?= ucfirst($pesanan['status']) ?>
+                  </span>
+                </p>
                 <p><strong>Tanggal:</strong> <?= date('d M Y H:i', strtotime($pesanan['tanggal_pemesanan'])) ?></p>
                 <p><strong>Total:</strong> Rp <?= number_format($pesanan['total_harga'], 0, ',', '.') ?></p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <!-- Tombol Detail -->
+                  <a href="detail_order.php?id=<?= $pesanan['id'] ?>" class="btn btn-info btn-sm d-flex align-items-center gap-2">
+                    <i class="fas fa-info-circle"></i> Detail
+                  </a>
+                  <!-- Tombol Cetak Struct -->
+                  <button onclick="printStruct(<?= $pesanan['id'] ?>)" class="btn btn-danger btn-sm d-flex align-items-center gap-2">
+                    <i class="fas fa-print"></i> Cetak Struct
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -212,4 +247,11 @@ $pesanan_semua = $pesanan_semua_result ? $pesanan_semua_result->fetch_all(MYSQLI
       }
     });
   });
+</script>
+
+<script>
+  // Fungsi untuk cetak struct
+  function printStruct(orderId) {
+    window.open('print_struct.php?id=' + orderId, '_blank');
+  }
 </script>

@@ -9,13 +9,8 @@ function write_log($message, $level = 'INFO')
     // Ambil waktu sekarang dalam WIB
     $timestamp = date('Y-m-d H:i:s');
 
-    // Ambil detail debug backtrace (file dan baris pemanggil)
-    $debug_backtrace = debug_backtrace();
-    $caller_file = isset($debug_backtrace[0]['file']) ? $debug_backtrace[0]['file'] : 'unknown_file';
-    $caller_line = isset($debug_backtrace[0]['line']) ? $debug_backtrace[0]['line'] : 'unknown_line';
-
-    // Buat format log yang lebih detail
-    $logMessage = "[{$timestamp}] [{$level}] [File: {$caller_file}] [Line: {$caller_line}] - {$message}" . PHP_EOL;
+    // Buat format log yang lebih sederhana
+    $logMessage = "[{$timestamp}] [{$level}] - {$message}" . PHP_EOL;
 
     // Tentukan file log
     $logDirectory = __DIR__ . '/../logs';

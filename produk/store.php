@@ -1,7 +1,6 @@
 <?php
 
 require_once '../helper/connection.php';
-require_once '../helper/logger.php';
 
 class Produk
 {
@@ -16,7 +15,6 @@ class Produk
 
     public function store($data, $file, $username)
     {
-        // Validasi data
         $errors = $this->validate($data, $file);
         if (!empty($errors)) {
             $this->logError($username, $errors, "Validasi gagal saat menambahkan produk.");
@@ -31,8 +29,7 @@ class Produk
             ];
         }
 
-        // Proses upload file
-        $fileName = $this->uploadFile($file['gambar'], $username);
+        $fileName = $this->uploadFile($file['gambar'], $data['nama'], $username);
 
         if (!$fileName) {
             $this->logError($username, null, "Gagal mengunggah gambar.");
@@ -47,7 +44,6 @@ class Produk
             ];
         }
 
-        // Simpan data ke database (termasuk jumlah_terjual)
         $jumlah_terjual = 0;
         $query = $this->connection->prepare("INSERT INTO produk (nama, harga, stock, gambar, jumlah_terjual) VALUES (?, ?, ?, ?, ?)");
         $query->bind_param(
@@ -61,12 +57,11 @@ class Produk
 
         if ($query->execute()) {
             $this->logSuccess($username, $data, "Berhasil menambahkan produk.");
-
-            // Menambahkan detail produk pada pesan sukses
             $_SESSION['info'] = [
                 'status' => 'success',
                 'message' => "Produk berhasil ditambahkan. Nama: {$data['nama']} | Harga: Rp" . number_format($data['harga'], 0, ',', '.') . "."
             ];
+            $this->validateUploadedFiles();
             return [
                 'status' => 'success',
                 'message' => "Produk berhasil ditambahkan. Nama: {$data['nama']} | Harga: Rp" . number_format($data['harga'], 0, ',', '.') . "."
@@ -85,29 +80,58 @@ class Produk
         }
     }
 
+    private function uploadFile($file, $username, $namaProduk)
+    {
+        // Bersihkan nama file
+        $fileBaseName = pathinfo($file['name'], PATHINFO_FILENAME);
+        $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
+
+        // Buat nama file baru: datetime_namagambar_namaproduk
+        $timestamp = date('YmdHis');
+        $safeFileName = preg_replace('/[^a-zA-Z0-9_]/', '_', $fileBaseName);
+        $safeNamaProduk = preg_replace('/[^a-zA-Z0-9_]/', '_', $namaProduk);
+        $newFileName = "{$timestamp}_{$safeFileName}_{$safeNamaProduk}.{$fileExtension}";
+
+        $targetPath = $this->uploadDir . $newFileName;
+
+        // Pindahkan file
+        if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
+            $this->logError($username, null, "Gagal mengunggah gambar: {$file['name']}");
+            return false;
+        }
+
+        return $newFileName;
+    }
+
+    private function validateUploadedFiles()
+    {
+        $uploadedFiles = array_diff(scandir($this->uploadDir), ['.', '..']);
+        $query = $this->connection->query("SELECT gambar FROM produk");
+        $validFiles = $query->fetch_all(MYSQLI_ASSOC);
+        $validFiles = array_column($validFiles, 'gambar');
+
+        foreach ($uploadedFiles as $file) {
+            if (!in_array($file, $validFiles)) {
+                unlink($this->uploadDir . $file);
+            }
+        }
+    }
 
     private function validate($data, $file)
     {
         $errors = [];
-
-        // Validasi nama produk tidak boleh kosong
         if (empty($data['nama'])) {
             $errors['nama'] = 'Nama produk wajib diisi.';
-        } else {
-            // Validasi nama produk unik
-            if ($this->isNamaProdukExists($data['nama'])) {
-                $errors['nama'] = 'Nama produk sudah ada, gunakan nama lain.';
-            }
+        } elseif ($this->isNamaProdukExists($data['nama'])) {
+            $errors['nama'] = 'Nama produk sudah ada, gunakan nama lain.';
         }
 
-        // Validasi harga produk
         if (empty($data['harga'])) {
             $errors['harga'] = 'Harga produk wajib diisi.';
         } elseif (!is_numeric($data['harga']) || $data['harga'] <= 0) {
             $errors['harga'] = 'Harga produk harus berupa angka positif.';
         }
 
-        // Validasi file gambar
         if (isset($file['gambar']) && $file['gambar']['error'] === UPLOAD_ERR_OK) {
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
             if (!in_array($file['gambar']['type'], $allowedTypes)) {
@@ -130,30 +154,17 @@ class Produk
         return $row['count'] > 0;
     }
 
-    private function uploadFile($file, $username)
-    {
-        $targetPath = $this->uploadDir . basename($file['name']);
-        if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
-            $this->logError($username, null, "Gagal mengunggah gambar: {$file['name']}");
-            return false;
-        }
-
-        return basename($file['name']);
-    }
-
     private function logError($username, $errors, $message)
     {
         $logMessage = "{$username} - {$message}";
         if ($errors) {
             $logMessage .= " | Errors: " . json_encode($errors);
         }
-        write_log($logMessage, 'ERROR');
     }
 
     private function logSuccess($username, $data, $message)
     {
         $logMessage = "{$username} - {$message} | Data: " . json_encode($data);
-        write_log($logMessage, 'SUCCESS');
     }
 }
 
@@ -171,8 +182,8 @@ $produk = new Produk($connection);
 $result = $produk->store($data, $_FILES, $username);
 
 if ($result['status'] === 'failed') {
-    $_SESSION['errors'] = $result['errors'];  // Simpan error untuk form
-    $_SESSION['old'] = $data;  // Simpan data lama untuk form
+    $_SESSION['errors'] = $result['errors'];
+    $_SESSION['old'] = $data;
     header('Location: ./create.php');
     exit;
 }

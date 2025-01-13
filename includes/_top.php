@@ -18,6 +18,9 @@ ob_start();
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>Tea Bliss</title>
 
+  <!-- Link Logo -->
+  <link rel="icon" href="../assets/img/favicon_io/Tea_Bliss_logo-32x32.png" type="image/x-icon">
+
   <!-- General CSS Files -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -35,6 +38,26 @@ ob_start();
   <!-- Template CSS -->
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/components.css">
+
+  <style>
+    /* Default: Logo besar terlihat, logo kecil tersembunyi */
+    aside#sidebar-wrapper:not(.sidebar-collapsed) .logo-large {
+      display: block !important;
+    }
+
+    aside#sidebar-wrapper:not(.sidebar-collapsed) .logo-small {
+      display: none !important;
+    }
+
+    /* Ketika sidebar menyusut */
+    aside#sidebar-wrapper.sidebar-collapsed .logo-large {
+      display: none !important;
+    }
+
+    aside#sidebar-wrapper.sidebar-collapsed .logo-small {
+      display: block !important;
+    }
+  </style>
 </head>
 
 <body>

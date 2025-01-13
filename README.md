@@ -1,6 +1,6 @@
 # **Project Akhir - Sistem CRUD Produk**
 
-Aplikasi berbasis web sederhana menggunakan PHP native dengan CSS Bootstrap dan JavaScript. Proyek ini mendukung manajemen produk, mencakup CRUD, serta fitur keamanan dan tampilan responsif.
+Aplikasi berbasis web sederhana menggunakan PHP native dengan CSS Bootstrap dan JavaScript. Proyek ini mendukung manajemen produk, mencakup CRUD, serta fitur keamanan, tampilan responsif, dan sistem tambahan yang canggih.
 
 ## **Fitur Utama**
 
@@ -11,13 +11,27 @@ Aplikasi berbasis web sederhana menggunakan PHP native dengan CSS Bootstrap dan 
    - Log aktivitas untuk audit.
 3. **Keamanan**:
    - Sistem login berbasis file `auth.php`.
-4. **UI/UX**:
+   - Sistem OTP (One-Time Password) untuk lapisan keamanan tambahan.
+4. **Manajemen Akun**:
+   - Fitur untuk mengelola akun pengguna (buat, edit, hapus).
+5. **Sistem Pemesanan**:
+   - Pemesanan produk dengan sistem yang diperbarui untuk lebih efisien.
+6. **UI/UX**:
    - Responsif dengan Bootstrap.
 
-## **Versi Terbaru (1.3.4)**
+## **Versi Terbaru (2.0.0)**
 
-- Memperbaiki page user_dashboard, keranjang, pesanan, edit_pesanan
-- Memperbaiki sistem pesanan, edit pesanan
+**Big Update**: Pembaruan besar dengan fitur-fitur canggih dan sistem yang diperbaiki:
+
+- **Penambahan Sistem OTP**:
+  - Mendukung OTP sebagai langkah verifikasi tambahan.
+- **Peningkatan Sistem Pemesanan**:
+  - Pemrosesan pesanan lebih cepat dan efisien.
+  - Fitur edit pesanan lebih fleksibel.
+- **Sistem Logger Diperbarui**:
+  - Log aktivitas lebih rinci untuk analisis dan audit.
+- **Penambahan Sistem Manajemen Akun**:
+  - Fitur pengelolaan akun untuk admin dan user.
 
 ## **Struktur Folder**
 
@@ -25,12 +39,15 @@ Aplikasi berbasis web sederhana menggunakan PHP native dengan CSS Bootstrap dan 
 projectakhir/
 ├── assets/            # File statis (CSS, JS, gambar)
 ├── dashboard/         # Halaman dashboard admin dan user
-├── helper/            # Fungsi pembantu (auth, koneksi, logger)
+├── helper/            # Fungsi pembantu (auth, koneksi, logger, otp)
 ├── includes/          # Layout (header, sidenav, footer)
 ├── logs/              # Log aktivitas
 ├── produk/            # Logika CRUD produk
+├── account/           # Sistem manajemen akun
 └── README.md          # Dokumentasi proyek
 ```
+
+````
 
 ## **Cara Menggunakan**
 
@@ -51,3 +68,6 @@ projectakhir/
 Buka _issue_ atau buat _pull request_ untuk saran atau perbaikan.
 
 ---
+
+Dengan pembaruan besar ini, aplikasi kini memiliki sistem yang lebih aman, efisien, dan kaya fitur untuk memenuhi kebutuhan pengguna yang lebih kompleks.
+````

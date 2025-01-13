@@ -1,7 +1,5 @@
 <?php
-
 require_once '../helper/connection.php';
-require_once '../helper/logger.php';
 
 class Produk
 {
@@ -16,14 +14,12 @@ class Produk
     {
         // Validasi ID
         if (!$id || !is_numeric($id)) {
-            write_log("Validasi gagal: ID produk tidak valid (ID: {$id}).", 'ERROR');
             throw new Exception('ID produk tidak valid.');
         }
 
         // Ambil data produk lama
         $produkLama = $this->getProdukById($id);
         if (!$produkLama) {
-            write_log("Produk tidak ditemukan: ID ({$id}) tidak ada.", 'ERROR');
             throw new Exception('Produk tidak ditemukan.');
         }
 
@@ -33,15 +29,17 @@ class Produk
         // Proses file gambar (jika ada)
         $gambarBaru = $produkLama['gambar'];
         if (!empty($file['name'])) {
-            $gambarBaru = $this->handleFileUpload($file);
+            // Hapus gambar lama jika ada
+            $this->hapusFileGambar($produkLama['gambar']);
+            $gambarBaru = $this->uploadFile($file, $data['nama']);
         }
 
         // Update data di database
-        $query = "UPDATE produk SET 
-            nama = ?, 
-            harga = ?, 
-            stock = ?, 
-            gambar = ? 
+        $query = "UPDATE produk SET
+        nama = ?,
+        harga = ?,
+        stock = ?,
+        gambar = ?
         WHERE id = ?";
 
         $stmt = $this->connection->prepare($query);
@@ -55,20 +53,27 @@ class Produk
         );
 
         if ($stmt->execute()) {
-            // Log keberhasilan update produk
-            write_log("Produk ID {$id} berhasil diperbarui. Data: " . json_encode($data) . " | Gambar: {$gambarBaru}", 'SUCCESS');
-
-            // Menyimpan pesan sukses dengan detail produk yang diperbarui
             $_SESSION['info'] = [
                 'status' => 'success',
                 'message' => "Produk berhasil diperbarui. Nama: {$data['nama']} | Harga: Rp" . number_format($data['harga'], 0, ',', '.') . " | Stock: {$data['stock']}."
             ];
-
             return true;
         } else {
-            // Log kegagalan update produk
-            write_log("Gagal memperbarui produk ID {$id}. Error: " . $stmt->error, 'ERROR');
             throw new Exception('Gagal memperbarui data produk.');
+        }
+    }
+
+    // Fungsi untuk menghapus file gambar
+    private function hapusFileGambar($gambar)
+    {
+        $uploadDir = '../uploads/';
+        $filePath = $uploadDir . $gambar;
+
+        // Cek apakah file gambar ada
+        if (file_exists($filePath)) {
+            if (!unlink($filePath)) {
+                throw new Exception("Gagal menghapus file gambar: {$gambar}");
+            }
         }
     }
 
@@ -100,27 +105,36 @@ class Produk
         }
 
         if (!empty($errors)) {
-            write_log("Validasi gagal: " . json_encode($errors), 'ERROR');
             throw new Exception(json_encode($errors));
         }
     }
 
-    private function handleFileUpload($file)
+    private function uploadFile($file, $namaProduk)
     {
         $uploadDir = '../uploads/';
-        $uploadFile = $uploadDir . basename($file['name']);
-        if (!move_uploaded_file($file['tmp_name'], $uploadFile)) {
-            write_log("Gagal mengunggah file gambar: " . $file['name'], 'ERROR');
+        $fileBaseName = pathinfo($file['name'], PATHINFO_FILENAME);
+        $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
+
+        // Format nama file dengan timestamp dan nama produk
+        $timestamp = date('YmdHis');
+        $safeFileName = preg_replace('/[^a-zA-Z0-9_]/', '_', $fileBaseName);
+        $safeNamaProduk = preg_replace('/[^a-zA-Z0-9_]/', '_', $namaProduk);
+        $newFileName = "{$timestamp}_{$safeFileName}_{$safeNamaProduk}.{$fileExtension}";
+
+        $targetPath = $uploadDir . $newFileName;
+
+        // Pindahkan file
+        if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
             throw new Exception('Gagal mengunggah file gambar.');
         }
-        return basename($file['name']);
+
+        return $newFileName;
     }
 }
 
 // Eksekusi proses
 session_start();
 try {
-    // Ambil data dari form
     $produk = new Produk($connection);
     $data = [
         'nama' => $_POST['nama'] ?? '',
@@ -128,20 +142,16 @@ try {
         'stock' => isset($_POST['stock']) ? 1 : 0
     ];
 
-    // Melakukan update produk
     $produk->update($_POST['id'], $data, $_FILES['gambar']);
 
-    // Menyimpan pesan sukses ke dalam session
     $_SESSION['info'] = [
         'status' => 'success',
         'message' => "Produk berhasil diperbarui. Nama: {$data['nama']} | Harga: Rp" . number_format($data['harga'], 0, ',', '.') . " | Stock: {$data['stock']}."
     ];
 
-    // Arahkan ke halaman index setelah berhasil
     header('Location: ./index.php');
     exit;
 } catch (Exception $e) {
-    // Menyimpan pesan error ke dalam session
     $errorMessage = json_decode($e->getMessage(), true);
     if (json_last_error() !== JSON_ERROR_NONE) {
         $errorMessage = ['error' => 'Terjadi kesalahan pada sistem.'];
@@ -150,11 +160,9 @@ try {
         'status' => 'danger',
         'message' => implode(' | ', $errorMessage)
     ];
-    write_log("Error memperbarui produk: " . $e->getMessage(), 'ERROR');
 
-    // Menyimpan input lama untuk digunakan di form edit
     $_SESSION['old'] = $_POST;
-    $_SESSION['errors'] = $errorMessage; // Menyimpan error untuk ditampilkan di form
+    $_SESSION['errors'] = $errorMessage;
     header('Location: ./edit.php?id=' . $_POST['id']);
     exit;
 }

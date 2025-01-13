@@ -58,7 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['jumlah'])) {
         $logMessage = implode(', ', $updateLogs);
         $notifMessage = implode(', ', $updateNotifs);
 
-        write_log("User '$username' mengupdate jumlah produk: $logMessage.", 'INFO');
         $_SESSION['info'] = [
             'status' => 'success',
             'message' => "Produk yang diperbarui: $notifMessage."
@@ -67,7 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['jumlah'])) {
 
     if (!empty($removedProducts)) {
         $removedList = implode(', ', $removedProducts);
-        write_log("User '$username' menghapus produk dari keranjang: $removedList.", 'INFO');
         $_SESSION['info'] = [
             'status' => 'success',
             'message' => "Produk yang dihapus: $removedList."
@@ -76,7 +74,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['jumlah'])) {
 
     if (!empty($errors)) {
         $errorList = implode(', ', $errors);
-        write_log("User '$username' mengalami kesalahan saat memperbarui keranjang: $errorList.", 'ERROR');
         $_SESSION['info'] = [
             'status' => 'danger',
             'message' => 'Kesalahan saat memperbarui keranjang. Periksa kembali data Anda.'
@@ -84,7 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['jumlah'])) {
     }
 } else {
     // Jika metode bukan POST atau data tidak valid
-    write_log('Request tidak valid untuk pembaruan keranjang.', 'ERROR');
     $_SESSION['info'] = [
         'status' => 'danger',
         'message' => 'Request tidak valid.'

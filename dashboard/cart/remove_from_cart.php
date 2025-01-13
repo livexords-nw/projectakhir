@@ -31,11 +31,6 @@ if (isset($_GET['id'])) {
         // Log dan set notifikasi jika produk berhasil dihapus
         if ($found) {
             $username = isset($_SESSION['login']['username']) ? $_SESSION['login']['username'] : 'Unknown User';
-            // Log penghapusan produk
-            write_log(
-                "User '$username' menghapus produk '$productName' (ID: $productId, Jumlah: $productJumlah) dari keranjang.",
-                'INFO'
-            );
 
             $_SESSION['info'] = [
                 'status' => 'success',
@@ -44,7 +39,6 @@ if (isset($_GET['id'])) {
         } else {
             // Log dan notifikasi jika produk tidak ditemukan
             $username = isset($_SESSION['login']['username']) ? $_SESSION['login']['username'] : 'Unknown User';
-            write_log("User '$username' gagal menghapus produk dengan ID: $productId. Produk tidak ditemukan di keranjang.", 'ERROR');
 
             $_SESSION['info'] = [
                 'status' => 'danger',
@@ -53,7 +47,6 @@ if (isset($_GET['id'])) {
         }
     } else {
         // Jika ID produk tidak valid atau keranjang kosong
-        write_log('ID produk tidak valid atau keranjang kosong.', 'ERROR');
         $_SESSION['info'] = [
             'status' => 'danger',
             'message' => 'ID produk tidak valid atau keranjang kosong.'
@@ -61,7 +54,6 @@ if (isset($_GET['id'])) {
     }
 } else {
     // Jika ID produk tidak ditemukan dalam GET
-    write_log('ID produk tidak ditemukan dalam request.', 'ERROR');
     $_SESSION['info'] = [
         'status' => 'danger',
         'message' => 'ID produk tidak ditemukan dalam request.'

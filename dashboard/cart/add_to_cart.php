@@ -5,7 +5,6 @@ require_once '../../helper/logger.php'; // Pastikan logger.php berada di lokasi 
 
 // Validasi data POST
 if (!isset($_POST['id'])) {
-    write_log('ID produk tidak ditemukan dalam POST request.', 'ERROR');
     echo "<script>alert('ID produk tidak ditemukan.'); window.history.back();</script>";
     exit;
 }
@@ -67,8 +66,6 @@ if ($result && mysqli_num_rows($result) > 0) {
         'message' => "Berhasil menambahkan {$jumlah} produk {$product_name} ke keranjang."
     ];
 
-    // Log aksi ke logger
-    write_log("User '$username' menambahkan {$jumlah} unit produk '{$product_name}' ke keranjang.", 'INFO');
 
     header("Location: ../user_dashboard.php");
     exit;
@@ -78,7 +75,6 @@ if ($result && mysqli_num_rows($result) > 0) {
         'status' => 'danger',
         'message' => "Produk tidak ditemukan atau stok tidak mencukupi untuk jumlah {$jumlah}."
     ];
-    write_log("User '$username' gagal menambahkan produk (ID: $product_id) ke keranjang. Stok tidak cukup atau produk tidak ditemukan.", 'ERROR');
     header("Location: ../user_dashboard.php");
     exit;
 }

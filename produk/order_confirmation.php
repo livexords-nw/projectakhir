@@ -1,6 +1,5 @@
 <?php
 session_start();
-require_once '../helper/logger.php';
 
 // Display notifications if available
 if (isset($_SESSION['info'])) {
@@ -105,8 +104,8 @@ unset($_SESSION['errors'], $_SESSION['old']);
                 <img src="../assets/img/avatar/Tea_Bliss_logo.png" alt="logo" class="img-fluid" style="max-width: 150px; height: auto;">
             </div>
             <h2 class="thank-you-msg">Terima kasih telah berbelanja!</h2>
-            <p class="order-number">Pesanan Anda telah berhasil diproses. Nomor meja Anda adalah <strong>#<?= htmlspecialchars($table_number); ?></strong></p>
-            <p class="order-number">Silakan menuju ke kasir untuk melakukan pembayaran.</p>
+            <p class="order-number">Pesanan Anda akan diproses</p>
+
 
             <a href="../dashboard/user_dashboard.php" class="btn btn-primary btn-back">Kembali ke Dashboard</a>
         </div>
@@ -120,5 +119,9 @@ unset($_SESSION['errors'], $_SESSION['old']);
     <script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
 
 </body>
+
+<?php
+require_once '../includes/_bottom.php';
+?>
 
 </html>

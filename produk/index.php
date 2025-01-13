@@ -9,7 +9,7 @@ $result = mysqli_query($connection, "SELECT * FROM produk");
 
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>Data Barang</h1>
+    <h1>Data Produk</h1>
     <a href="./create.php" class="btn btn-primary">Tambah Data</a>
   </div>
   <div class="row">
@@ -20,12 +20,12 @@ $result = mysqli_query($connection, "SELECT * FROM produk");
             <table class="table table-hover table-striped w-100" id="table-1">
               <thead>
                 <tr class="text-center">
-                  <th>No</th>
-                  <th>Nama</th>
-                  <th>Stock</th>
-                  <th>Harga</th>
-                  <th>Gambar</th>
-                  <th style="width: 150px;">Aksi</th>
+                  <th><i class="fas fa-list-ol"></i> No</th>
+                  <th><i class="fas fa-box"></i> Nama</th>
+                  <th><i class="fas fa-boxes"></i> Stock</th>
+                  <th><i class="fas fa-dollar-sign"></i> Harga</th>
+                  <th><i class="fas fa-image"></i> Gambar</th>
+                  <th style="width: 150px;"><i class="fas fa-cogs"></i> Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -42,12 +42,12 @@ $result = mysqli_query($connection, "SELECT * FROM produk");
                       <img src="../uploads/<?= $data['gambar'] ?>" alt="Gambar Barang" style="width: 80px; height: auto;">
                     </td>
                     <td>
-                      <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="#"
-                        onclick="confirmDelete(<?= $data['id'] ?>)">
-                        <i class="fas fa-trash fa-fw"></i>
-                      </a>
                       <a class="btn btn-sm btn-info" href="edit.php?id=<?= $data['id'] ?>">
-                        <i class="fas fa-edit fa-fw"></i>
+                        <i class="fas fa-edit fa-fw"></i> Edit
+                      </a>
+                      <a class="btn btn-sm btn-danger " href="#"
+                        onclick="confirmDelete(<?= $data['id'] ?>)">
+                        <i class="fas fa-trash fa-fw"></i> Hapus
                       </a>
                     </td>
                   </tr>

@@ -1,7 +1,59 @@
 <?php
 require_once 'helper/connection.php';
-require_once 'helper/logger.php';
+
+// Include PHPMailer
+require 'libs/PHPMailer/src/PHPMailer.php';
+require 'libs/PHPMailer/src/SMTP.php';
+require 'libs/PHPMailer/src/Exception.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 session_start();
+
+// Fungsi untuk mengirim email OTP
+function sendOtpEmail($email, $otp, $verificationLink, $username)
+{
+  $mail = new PHPMailer(true);
+
+  try {
+    // Konfigurasi SMTP
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = ''; // Ganti dengan email Anda
+    $mail->Password = ''; // Ganti dengan App Password Gmail Anda
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = 587;
+
+    // Pengirim dan penerima
+    $mail->setFrom('', 'Tea Bliss');
+    $mail->addAddress($email);
+
+    // Isi email
+    $mail->isHTML(true);
+    $mail->Subject = $username;
+    $mail->Body = "
+            <div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>
+                <div style='text-align: center;'>
+                    <img src='https://raw.githubusercontent.com/livexords-nw/projectakhir/main/assets/img/avatar/Tea_Bliss_logo.png' alt='Tea Bliss Logo' style='width: 200px;'>
+                    <p style='color: #555;'>Kode OTP Anda:</p>
+                    <h2 style='color: #4CAF50;'>$otp</h2>
+                </div>
+                <div style='text-align: center; margin-top: 30px;'>
+                    <a href='$verificationLink' style='background-color: #4CAF50; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-size: 14px;'>Verifikasi Akun Anda</a>
+                </div>
+                <p style='text-align: center; font-size: 14px; color: #555;'>Kode ini hanya berlaku selama 5 menit. Jika Anda tidak meminta kode ini, abaikan email ini.</p>
+            </div>";
+    $mail->AltBody = "Kode OTP Anda adalah: $otp\nKode ini hanya berlaku selama 5 menit.";
+
+    $mail->send();
+    return true;
+  } catch (Exception $e) {
+    error_log("Email gagal dikirim. Error: {$mail->ErrorInfo}");
+    return false;
+  }
+}
 
 if (isset($_POST['submit'])) {
   $username = mysqli_real_escape_string($connection, $_POST['username']);
@@ -12,42 +64,89 @@ if (isset($_POST['submit'])) {
   $result = mysqli_query($connection, $sql);
   $row = mysqli_fetch_assoc($result);
 
-  if ($row && password_verify($password, $row['password'])) {
-    $_SESSION['login'] = $row;
-    $_SESSION['username'] = $row['username'];
-    $_SESSION['role'] = $row['role'];
-    $_SESSION['user_id'] = $row['id'];
+  if ($row) {
+    if (password_verify($password, $row['password'])) {
+      if ($row['email_verified'] == 0) {
+        // Generate OTP
+        $otp = rand(100000, 999999);
+        $token = bin2hex(random_bytes(16));
+        $otpCreatedAt = date('Y-m-d H:i:s');
 
-    write_log("User '{$username}' (Role: '{$row['role']}') berhasil login.", 'SUCCESS');
+        // Simpan OTP ke database
+        $updateOTP = "UPDATE users SET token='$token', otp_code='$otp', otp_created_at='$otpCreatedAt' WHERE username='{$row['username']}'";
+        mysqli_query($connection, $updateOTP);
 
-    $_SESSION['info'] = [
-      'status' => 'success',
-      'message' => $row['role'] === 'admin'
-        ? "Kamu berhasil login sebagai admin."
-        : "Kamu berhasil login dengan username {$username}."
-    ];
+        // Kirim email dengan OTP
+        $verificationLink = "http://localhost/projectakhir_esteh/verify_otp.php?token=$token";
 
-    header('Location: ' . ($row['role'] === 'admin' ? 'dashboard/admin_dashboard.php' : 'dashboard/user_dashboard.php'));
-    exit();
+        if (sendOtpEmail($row['email'], $otp, $verificationLink,  $row['username'])) {
+          $_SESSION['info'] = [
+            'status' => 'danger',
+            'message' => "Email anda belum terverifikasi ,kode OTP telah dikirim ke email Anda."
+          ];
+        } else {
+          $_SESSION['info'] = [
+            'status' => 'error',
+            'message' => "Gagal mengirim email OTP. Silakan coba lagi."
+          ];
+        }
+
+        header('Location: login.php');
+        exit();
+      }
+
+      // Login berhasil
+      $_SESSION['login'] = $row;
+      $_SESSION['username'] = $row['username'];
+      $_SESSION['role'] = $row['role'];
+      $_SESSION['user_id'] = $row['id'];
+
+      $_SESSION['info'] = [
+        'status' => 'success',
+        'message' => $row['role'] === 'admin'
+          ? "Kamu berhasil login sebagai admin."
+          : "Kamu berhasil login dengan username {$username}."
+      ];
+
+      header('Location: ' . ($row['role'] === 'admin' ? 'dashboard/admin_dashboard.php' : 'dashboard/user_dashboard.php'));
+      exit();
+    } else {
+      $_SESSION['info'] = [
+        'status' => 'error',
+        'message' => "Password salah untuk username {$username}."
+      ];
+    }
   } else {
-    write_log("Percobaan login gagal untuk username '{$username}'.", 'ERROR');
     $_SESSION['info'] = [
       'status' => 'error',
-      'message' => "Username atau password salah untuk username {$username}."
+      'message' => "Username {$username} tidak ditemukan."
     ];
-
-    header('Location: login.php');
-    exit();
   }
+
+  header('Location: login.php');
+  exit();
 }
 
-// Ambil info dari session (jika ada) untuk ditampilkan dengan iziToast
-$info = isset($_SESSION['info']) ? $_SESSION['info'] : null;
-if ($info) {
-  unset($_SESSION['info']); // Hapus setelah ditampilkan
+// iziToast Notifikasi
+if (isset($_SESSION['info'])) {
+  $info = $_SESSION['info'];
+  $status = $info['status'];
+  $message = $info['message'];
+
+  echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            iziToast." . ($status === 'success' ? 'success' : 'error') . "({
+                title: '" . ($status === 'success' ? 'Sukses' : 'Gagal') . "',
+                message: '{$message}',
+                position: 'topCenter',
+                timeout: 5000
+            });
+        });
+    </script>";
+
+  unset($_SESSION['info']);
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -56,6 +155,9 @@ if ($info) {
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>Login Page</title>
+
+  <!-- Link Logo -->
+  <link rel="icon" href="assets/img/favicon_io/Tea_Bliss_logo-32x32.png" type="image/x-icon">
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -80,7 +182,7 @@ if ($info) {
         <div class="row">
           <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
             <div class="login-brand text-center mb-3">
-              <img src="./assets/img/avatar/Tea_Bliss_logo.png" alt="logo" class="img-fluid" style="max-width: 150px; height: auto;">
+              <img src="./assets/img/Tea_Bliss_logo.png" alt="logo" class="img-fluid" style="max-width: 150px; height: auto;">
             </div>
             <div class="card card-primary">
               <div class="card-header">
@@ -128,6 +230,9 @@ if ($info) {
                 <div class="mt-3 text-center">
                   Belum punya akun? <a href="register.php">Daftar di sini</a>
                 </div>
+                <!-- <div class="mt-3 text-center">
+                  Lupa password? <a href="lupa_password.php">Klik di sini</a>
+                </div> -->
               </div>
             </div>
           </div>
@@ -156,21 +261,10 @@ if ($info) {
       }
     });
   </script>
-
-  <!-- Notifikasi iziToast -->
-  <script>
-    <?php if ($info): ?>
-      document.addEventListener('DOMContentLoaded', function() {
-        iziToast.<?= $info['status'] ?>({
-          title: "<?= ucfirst($info['status']) ?>",
-          message: "<?= $info['message'] ?>",
-          position: 'topCenter',
-          timeout: 5000
-        });
-      });
-    <?php endif; ?>
-  </script>
-
 </body>
+
+<?php
+require_once 'includes/_bottom.php';
+?>
 
 </html>

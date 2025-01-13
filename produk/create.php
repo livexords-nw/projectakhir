@@ -36,7 +36,6 @@ if ($info) {
 unset($_SESSION['errors'], $_SESSION['old']);
 
 $username = $_SESSION['login']['username'] ?? 'Unknown User';
-write_log("{$username} membuka form Tambah Data Produk.", 'INFO');
 ?>
 
 <section class="section">
