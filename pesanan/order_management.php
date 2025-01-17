@@ -46,9 +46,9 @@ try {
     $total = $order['total'];
 
     switch ($action) {
-        case 'completed':
+        case 'approved':
             // Tandai pesanan sebagai selesai
-            $query = "UPDATE pemesanan SET status = 'completed', tanggal_selesai = NOW() WHERE id = ?";
+            $query = "UPDATE pemesanan SET status = 'approved', tanggal_selesai = NOW() WHERE id = ?";
             $stmt = $connection->prepare($query);
             $stmt->bind_param("i", $order_id);
 
@@ -74,9 +74,9 @@ try {
             }
 
             // Catat log
-            write_log("Pesanan diselesaikan: ID Pesanan={$order_id}, Pemesan={$nama_pemesan}, Total={$total}", 'INFO');
+            write_log("Pesanan approved: ID Pesanan={$order_id}, Pemesan={$nama_pemesan}, Total={$total}", 'INFO');
 
-            $_SESSION['info'] = ['status' => 'success', 'message' => 'Pesanan berhasil diselesaikan.'];
+            $_SESSION['info'] = ['status' => 'success', 'message' => 'Pesanan dengan id ' . $order_id . ' berhasil di approved.'];
             break;
 
         case 'canceled':
@@ -93,7 +93,7 @@ try {
             // Catat log
             write_log("Pesanan dibatalkan: ID Pesanan={$order_id}, Pemesan={$nama_pemesan}, Total={$total}, Alasan={$info}", 'INFO');
 
-            $_SESSION['info'] = ['status' => 'success', 'message' => 'Pesanan berhasil dibatalkan.'];
+            $_SESSION['info'] = ['status' => 'success', 'message' => 'Pesanan dengan id ' . $order_id . ' berhasil dibatalkan.'];
             break;
 
         default:

@@ -33,6 +33,16 @@ if (!$pesanan) {
     die('Pesanan tidak ditemukan.');
 }
 
+// Query untuk mengambil nama meja berdasarkan meja_id
+$queryMeja = $connection->prepare(
+    "SELECT table_number FROM meja WHERE id = ?"
+);
+$queryMeja->bind_param('i', $pesanan['meja_id']);
+$queryMeja->execute();
+$resultMeja = $queryMeja->get_result();
+$meja = $resultMeja->fetch_assoc();
+$tableNumber = $meja ? $meja['table_number'] : 'Meja tidak ditemukan';
+
 // Query untuk mengambil detail pesanan dan nama produk
 $queryDetail = $connection->prepare(
     "SELECT dp.jumlah, dp.subtotal, pr.nama AS nama_produk 
@@ -129,14 +139,26 @@ $detailPesanan = $resultDetail->fetch_all(MYSQLI_ASSOC);
 
 <body>
     <div class="struct-container" style="position: relative; padding: 20px;">
-        <img src="../assets/img/avatar/Tea_Bliss_logo.png" alt="Logo" style="width: 120px; position: absolute; top: 20px; right: 20px;">
+        <img src="../assets/img/Tea_Bliss_logo.png" alt="Logo" style="width: 120px; position: absolute; top: 20px; right: 20px;">
         <h1 class="text-center" style="margin-top: 0;">Struk Pesanan</h1>
         <h2 class="text-center">#<?= htmlspecialchars($pesanan['id']) ?></h2>
         <div class="info">
             <p><strong>Nama Pemesan:</strong> <?= htmlspecialchars($pesanan['nama_pemesan']) ?></p>
             <p><strong>Tanggal Pemesanan:</strong> <?= date('d M Y H:i', strtotime($pesanan['tanggal_pemesanan'])) ?></p>
-            <p><strong>Nomor Meja:</strong> <?= htmlspecialchars($pesanan['table_number']) ?></p>
-            <p><strong>Status:</strong> <?= ucfirst($pesanan['status']) ?></p>
+            <p><strong>Nomor Meja:</strong> <?= htmlspecialchars($tableNumber) ?></p>
+            <?php
+            $status = htmlspecialchars($pesanan['status']);
+            $info = htmlspecialchars($pesanan['info']);
+
+            if ($status === 'canceled') {
+                if (str_starts_with($info, 'user')) {
+                    $status .= ' by User';
+                }
+            }
+            ?>
+            <p><strong>Status:</strong>
+                <span class="badge <?= $badgeColor ?>"><?= $status ?></span><br>
+            </p>
             <p><strong>Total Harga:</strong> Rp <?= number_format($pesanan['total_harga'], 0, ',', '.') ?></p>
         </div>
         <hr>

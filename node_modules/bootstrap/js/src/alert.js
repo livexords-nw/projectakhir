@@ -1,87 +1,179 @@
 /**
  * --------------------------------------------------------------------------
- * Bootstrap alert.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ * Bootstrap (v4.3.1): alert.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
 
-import BaseComponent from './base-component.js'
-import EventHandler from './dom/event-handler.js'
-import { enableDismissTrigger } from './util/component-functions.js'
-import { defineJQueryPlugin } from './util/index.js'
+import $ from 'jquery'
+import Util from './util'
 
 /**
+ * ------------------------------------------------------------------------
  * Constants
+ * ------------------------------------------------------------------------
  */
 
-const NAME = 'alert'
-const DATA_KEY = 'bs.alert'
-const EVENT_KEY = `.${DATA_KEY}`
+const NAME                = 'alert'
+const VERSION             = '4.3.1'
+const DATA_KEY            = 'bs.alert'
+const EVENT_KEY           = `.${DATA_KEY}`
+const DATA_API_KEY        = '.data-api'
+const JQUERY_NO_CONFLICT  = $.fn[NAME]
 
-const EVENT_CLOSE = `close${EVENT_KEY}`
-const EVENT_CLOSED = `closed${EVENT_KEY}`
-const CLASS_NAME_FADE = 'fade'
-const CLASS_NAME_SHOW = 'show'
+const Selector = {
+  DISMISS : '[data-dismiss="alert"]'
+}
+
+const Event = {
+  CLOSE          : `close${EVENT_KEY}`,
+  CLOSED         : `closed${EVENT_KEY}`,
+  CLICK_DATA_API : `click${EVENT_KEY}${DATA_API_KEY}`
+}
+
+const ClassName = {
+  ALERT : 'alert',
+  FADE  : 'fade',
+  SHOW  : 'show'
+}
 
 /**
- * Class definition
+ * ------------------------------------------------------------------------
+ * Class Definition
+ * ------------------------------------------------------------------------
  */
 
-class Alert extends BaseComponent {
+class Alert {
+  constructor(element) {
+    this._element = element
+  }
+
   // Getters
-  static get NAME() {
-    return NAME
+
+  static get VERSION() {
+    return VERSION
   }
 
   // Public
-  close() {
-    const closeEvent = EventHandler.trigger(this._element, EVENT_CLOSE)
 
-    if (closeEvent.defaultPrevented) {
+  close(element) {
+    let rootElement = this._element
+    if (element) {
+      rootElement = this._getRootElement(element)
+    }
+
+    const customEvent = this._triggerCloseEvent(rootElement)
+
+    if (customEvent.isDefaultPrevented()) {
       return
     }
 
-    this._element.classList.remove(CLASS_NAME_SHOW)
+    this._removeElement(rootElement)
+  }
 
-    const isAnimated = this._element.classList.contains(CLASS_NAME_FADE)
-    this._queueCallback(() => this._destroyElement(), this._element, isAnimated)
+  dispose() {
+    $.removeData(this._element, DATA_KEY)
+    this._element = null
   }
 
   // Private
-  _destroyElement() {
-    this._element.remove()
-    EventHandler.trigger(this._element, EVENT_CLOSED)
-    this.dispose()
+
+  _getRootElement(element) {
+    const selector = Util.getSelectorFromElement(element)
+    let parent     = false
+
+    if (selector) {
+      parent = document.querySelector(selector)
+    }
+
+    if (!parent) {
+      parent = $(element).closest(`.${ClassName.ALERT}`)[0]
+    }
+
+    return parent
+  }
+
+  _triggerCloseEvent(element) {
+    const closeEvent = $.Event(Event.CLOSE)
+
+    $(element).trigger(closeEvent)
+    return closeEvent
+  }
+
+  _removeElement(element) {
+    $(element).removeClass(ClassName.SHOW)
+
+    if (!$(element).hasClass(ClassName.FADE)) {
+      this._destroyElement(element)
+      return
+    }
+
+    const transitionDuration = Util.getTransitionDurationFromElement(element)
+
+    $(element)
+      .one(Util.TRANSITION_END, (event) => this._destroyElement(element, event))
+      .emulateTransitionEnd(transitionDuration)
+  }
+
+  _destroyElement(element) {
+    $(element)
+      .detach()
+      .trigger(Event.CLOSED)
+      .remove()
   }
 
   // Static
-  static jQueryInterface(config) {
+
+  static _jQueryInterface(config) {
     return this.each(function () {
-      const data = Alert.getOrCreateInstance(this)
+      const $element = $(this)
+      let data       = $element.data(DATA_KEY)
 
-      if (typeof config !== 'string') {
-        return
+      if (!data) {
+        data = new Alert(this)
+        $element.data(DATA_KEY, data)
       }
 
-      if (data[config] === undefined || config.startsWith('_') || config === 'constructor') {
-        throw new TypeError(`No method named "${config}"`)
+      if (config === 'close') {
+        data[config](this)
       }
-
-      data[config](this)
     })
+  }
+
+  static _handleDismiss(alertInstance) {
+    return function (event) {
+      if (event) {
+        event.preventDefault()
+      }
+
+      alertInstance.close(this)
+    }
   }
 }
 
 /**
- * Data API implementation
+ * ------------------------------------------------------------------------
+ * Data Api implementation
+ * ------------------------------------------------------------------------
  */
 
-enableDismissTrigger(Alert, 'close')
+$(document).on(
+  Event.CLICK_DATA_API,
+  Selector.DISMISS,
+  Alert._handleDismiss(new Alert())
+)
 
 /**
+ * ------------------------------------------------------------------------
  * jQuery
+ * ------------------------------------------------------------------------
  */
 
-defineJQueryPlugin(Alert)
+$.fn[NAME]             = Alert._jQueryInterface
+$.fn[NAME].Constructor = Alert
+$.fn[NAME].noConflict  = () => {
+  $.fn[NAME] = JQUERY_NO_CONFLICT
+  return Alert._jQueryInterface
+}
 
 export default Alert

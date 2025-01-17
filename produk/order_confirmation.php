@@ -101,7 +101,7 @@ unset($_SESSION['errors'], $_SESSION['old']);
     <div class="container">
         <div class="card p-4">
             <div class="login-brand text-center mb-3">
-                <img src="../assets/img/avatar/Tea_Bliss_logo.png" alt="logo" class="img-fluid" style="max-width: 150px; height: auto;">
+                <img src="../assets/img/Tea_Bliss_logo.png" alt="logo" class="img-fluid" style="max-width: 150px; height: auto;">
             </div>
             <h2 class="thank-you-msg">Terima kasih telah berbelanja!</h2>
             <p class="order-number">Pesanan Anda akan diproses</p>

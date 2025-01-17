@@ -82,15 +82,6 @@ foreach ($produk_stok as $item) {
 }
 ?>
 
-<head>
-  <style>
-    .card-body {
-      white-space: nowrap;
-      overflow: hidden;
-      /* text-overflow: ellipsis; */
-    }
-  </style>
-</head>
 <section class="section">
   <div class="section-header">
     <h1>Admin Dashboard</h1>
@@ -102,10 +93,10 @@ foreach ($produk_stok as $item) {
 
   <!-- Statistik Total -->
   <div class="row">
-    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+    <div class="col-12 col-md-4">
       <div class="card card-statistic-1">
-        <div class="card-icon bg-primary">
-          <i class="fas fa-box"></i>
+        <div class="card-icon bg-primary text-white">
+          <i class="fas fa-box fa-2x"></i>
         </div>
         <div class="card-wrap">
           <div class="card-header">
@@ -117,10 +108,10 @@ foreach ($produk_stok as $item) {
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+    <div class="col-12 col-md-4">
       <div class="card card-statistic-1">
-        <div class="card-icon bg-danger">
-          <i class="fas fa-dollar-sign"></i>
+        <div class="card-icon bg-danger text-white">
+          <i class="fas fa-dollar-sign fa-2x"></i>
         </div>
         <div class="card-wrap">
           <div class="card-header">
@@ -132,10 +123,10 @@ foreach ($produk_stok as $item) {
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+    <div class="col-12 col-md-4">
       <div class="card card-statistic-1">
-        <div class="card-icon bg-success">
-          <i class="fas fa-chart-line"></i>
+        <div class="card-icon bg-success text-white">
+          <i class="fas fa-chart-line fa-2x"></i>
         </div>
         <div class="card-wrap">
           <div class="card-header">
@@ -251,8 +242,6 @@ foreach ($produk_stok as $item) {
     </div>
   </section>
 
-  <!-- Script untuk Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     const produkTerjualChart = new Chart(document.getElementById('produkTerjualChart'), {
       type: 'bar',

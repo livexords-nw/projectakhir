@@ -81,7 +81,7 @@ echo "<script>
                                     <td>Rp <?= number_format($subtotal, 0, ',', '.') ?></td>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?= $item['id'] ?>)">
-                                            <i class="fas fa-trash-alt"></i>
+                                            <i class="fas fa-trash fa-fw"></i> Hapus
                                         </button>
                                     </td>
                                 </tr>
@@ -116,7 +116,7 @@ echo "<script>
                         <input type="datetime-local" name="booking_start" id="booking_start" class="form-control" required onfocus="this.showPicker()">
                     </div>
                     <div class="form-group">
-                        <label for="booking_duration">Durasi Booking</label>
+                        <label for="booking_duration">Waktu Pemakaian Meja</label>
                         <select name="booking_duration" id="booking_duration" class="form-control" required>
                             <option value="15">15 menit</option>
                             <option value="30">30 menit</option>

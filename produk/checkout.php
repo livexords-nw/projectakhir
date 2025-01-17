@@ -77,7 +77,7 @@ try {
     // **5.1 Cek Konflik Jadwal Meja**
     $queryCheckConflict = "SELECT * FROM pemesanan 
                            WHERE meja_id = ? 
-                           AND status IN ('pending', 'completed') 
+                           AND status IN ('pending', 'approved') 
                            AND (booking_start < ? AND booking_end > ?)";
     $stmtCheckConflict = $connection->prepare($queryCheckConflict);
     $stmtCheckConflict->bind_param("iss", $meja_id, $booking_end, $booking_start);
@@ -93,12 +93,13 @@ try {
         return $total + ($item['harga'] * $item['jumlah']);
     }, 0);
 
-    // **5.3 Tambahkan Data Pemesanan**
-    $queryPemesanan = "INSERT INTO pemesanan (nama_pemesan, tanggal_pemesanan, total_harga, status, user_id, meja_id, booking_start, booking_end, payment_proof) 
-                       VALUES (?, NOW(), ?, 'pending', ?, ?, ?, ?, ?)";
+    // 5.3 Tambahkan Data Pemesanan
+    $queryPemesanan = "INSERT INTO pemesanan (nama_pemesan, tanggal_pemesanan, total_harga, status, user_id, meja_id, booking_start, booking_end, payment_proof, type_payment) 
+VALUES (?, NOW(), ?, 'pending', ?, ?, ?, ?, ?, ?)";
     $stmtPemesanan = $connection->prepare($queryPemesanan);
-    $stmtPemesanan->bind_param("sdissss", $username, $total_harga, $user_id, $meja_id, $booking_start, $booking_end, $filename);
+    $stmtPemesanan->bind_param("sdisssss", $username, $total_harga, $user_id, $meja_id, $booking_start, $booking_end, $filename, $payment_method);
     $stmtPemesanan->execute();
+
 
     $pemesanan_id = $stmtPemesanan->insert_id;
 

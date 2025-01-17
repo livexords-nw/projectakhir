@@ -14,45 +14,83 @@ session_start();
 // Fungsi untuk mengirim email OTP
 function sendOtpEmail($email, $otp, $verificationLink, $username)
 {
+  $smtpCredentials = [];
+
+  $maxRetries = 5; // Jumlah maksimal percobaan
+  $retryDelay = 3; // Delay antar percobaan dalam detik (3 detik)
+  $emailSent = false; // Flag untuk memeriksa apakah email berhasil dikirim
+  $attempt = 0; // Untuk menghitung percobaan
+
+  // Inisialisasi PHPMailer
   $mail = new PHPMailer(true);
 
-  try {
-    // Konfigurasi SMTP
-    $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com';
-    $mail->SMTPAuth = true;
-    $mail->Username = ''; // Ganti dengan email Anda
-    $mail->Password = ''; // Ganti dengan App Password Gmail Anda
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = 587;
+  while ($attempt < $maxRetries && !$emailSent) {
+    try {
+      // Ambil kredensial yang sesuai dari array berdasarkan percobaan
+      $credentials = $smtpCredentials[$attempt];
 
-    // Pengirim dan penerima
-    $mail->setFrom('', 'Tea Bliss');
-    $mail->addAddress($email);
+      // Konfigurasi SMTP
+      $mail->isSMTP();
+      $mail->Host = 'smtp.gmail.com';
+      $mail->SMTPAuth = true;
+      $mail->Username = $credentials['username']; // Username SMTP
+      $mail->Password = $credentials['password']; // Password SMTP
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+      $mail->Port = 587;
 
-    // Isi email
-    $mail->isHTML(true);
-    $mail->Subject = $username;
-    $mail->Body = "
-            <div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>
-                <div style='text-align: center;'>
-                    <img src='https://raw.githubusercontent.com/livexords-nw/projectakhir/main/assets/img/avatar/Tea_Bliss_logo.png' alt='Tea Bliss Logo' style='width: 200px;'>
-                    <p style='color: #555;'>Kode OTP Anda:</p>
-                    <h2 style='color: #4CAF50;'>$otp</h2>
-                </div>
-                <div style='text-align: center; margin-top: 30px;'>
-                    <a href='$verificationLink' style='background-color: #4CAF50; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-size: 14px;'>Verifikasi Akun Anda</a>
-                </div>
-                <p style='text-align: center; font-size: 14px; color: #555;'>Kode ini hanya berlaku selama 5 menit. Jika Anda tidak meminta kode ini, abaikan email ini.</p>
-            </div>";
-    $mail->AltBody = "Kode OTP Anda adalah: $otp\nKode ini hanya berlaku selama 5 menit.";
+      // Pengirim dan penerima
+      $mail->setFrom($credentials['username'], 'Tea Bliss');
+      $mail->addAddress($email);
 
-    $mail->send();
-    return true;
-  } catch (Exception $e) {
-    error_log("Email gagal dikirim. Error: {$mail->ErrorInfo}");
+      // Isi email
+      $mail->isHTML(true);
+      $mail->Subject = $username;
+      $mail->Body = "
+                <div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>
+                    <div style='text-align: center;'>
+                        <img src='https://raw.githubusercontent.com/livexords-nw/projectakhir/main/assets/img/Tea_Bliss_logo.png' alt='Tea Bliss Logo' style='width: 200px;'>
+                        <p style='color: #555;'>Kode OTP Anda:</p>
+                        <h2 style='color: #4CAF50;'>$otp</h2>
+                    </div>
+                    <div style='text-align: center; margin-top: 30px;'>
+                        <a href='$verificationLink' style='background-color: #4CAF50; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-size: 14px;'>Verifikasi Akun Anda</a>
+                    </div>
+                    <p style='text-align: center; font-size: 14px; color: #555;'>Kode ini hanya berlaku selama 5 menit. Jika Anda tidak meminta kode ini, abaikan email ini.</p>
+                </div>";
+      $mail->AltBody = "Kode OTP Anda adalah: $otp\nKode ini hanya berlaku selama 5 menit.";
+
+      // Kirim email
+      if ($mail->send()) {
+        echo 'Email berhasil dikirim dengan ' . $credentials['username'] . '.';
+        $emailSent = true;
+      } else {
+        throw new Exception('Email gagal dikirim.');
+      }
+    } catch (Exception $e) {
+      // Tangkap error dan tampilkan pesan
+      error_log("Percobaan ke-" . ($attempt + 1) . " gagal. Error: {$mail->ErrorInfo}");
+
+      // Tunggu sebelum mencoba lagi
+      sleep($retryDelay);
+
+      // Increment attempt counter
+      $attempt++;
+    }
+  }
+
+  // Jika email gagal dikirim setelah 5 kali percobaan, ganti ke kredensial berikutnya
+  if (!$emailSent && $attempt < $maxRetries) {
+    $attempt = 0; // Reset percobaan jika perlu ganti kredensial
+    return sendOtpEmail($email, $otp, $verificationLink, $username); // Panggil ulang dengan kredensial yang baru
+  }
+
+  // Jika masih gagal setelah mencoba semua kredensial
+  if (!$emailSent) {
+    error_log('Email gagal dikirim setelah 5 kali percobaan dengan kredensial berbeda.');
     return false;
   }
+
+  return true;
 }
 
 if (isset($_POST['submit'])) {
@@ -76,8 +114,11 @@ if (isset($_POST['submit'])) {
         $updateOTP = "UPDATE users SET token='$token', otp_code='$otp', otp_created_at='$otpCreatedAt' WHERE username='{$row['username']}'";
         mysqli_query($connection, $updateOTP);
 
+        // Ambil nama domain
+        $host = $_SERVER['HTTP_HOST'];
+
         // Kirim email dengan OTP
-        $verificationLink = "http://localhost/projectakhir_esteh/verify_otp.php?token=$token";
+        $verificationLink = "https://$host/projectakhir_esteh/verify_otp.php?token=$token";
 
         if (sendOtpEmail($row['email'], $otp, $verificationLink,  $row['username'])) {
           $_SESSION['info'] = [
@@ -215,13 +256,6 @@ if (isset($_SESSION['info'])) {
                   </div>
 
                   <div class="form-group">
-                    <div class="custom-control custom-checkbox">
-                      <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
-                      <label class="custom-control-label" for="remember-me">Ingat Saya</label>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
                     <button name="submit" type="submit" class="btn btn-primary btn-lg btn-block" tabindex="3">
                       Login
                     </button>
@@ -230,9 +264,9 @@ if (isset($_SESSION['info'])) {
                 <div class="mt-3 text-center">
                   Belum punya akun? <a href="register.php">Daftar di sini</a>
                 </div>
-                <!-- <div class="mt-3 text-center">
+                <div class="mt-3 text-center">
                   Lupa password? <a href="lupa_password.php">Klik di sini</a>
-                </div> -->
+                </div>
               </div>
             </div>
           </div>

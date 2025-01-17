@@ -23,7 +23,7 @@ ob_start();
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+  <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css">
 
   <!-- CSS Libraries -->
   <link rel="stylesheet" href="../assets/modules/jqvmap/dist/jqvmap.min.css">
@@ -56,6 +56,31 @@ ob_start();
 
     aside#sidebar-wrapper.sidebar-collapsed .logo-small {
       display: block !important;
+    }
+
+    .sidebar-menu .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+    }
+
+    .sidebar-menu .nav-link i {
+      margin-right: 10px;
+      /* Memberikan jarak antara ikon dan teks */
+      font-size: 18px;
+      /* Menyesuaikan ukuran ikon */
+    }
+
+    .sidebar-menu .dropdown-menu a {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+    }
+
+    .sidebar-menu .dropdown-menu a i {
+      margin-right: 10px;
+      font-size: 16px;
+      /* Menyesuaikan ukuran ikon dropdown */
     }
   </style>
 </head>

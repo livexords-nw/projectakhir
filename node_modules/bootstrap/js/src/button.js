@@ -1,47 +1,129 @@
 /**
  * --------------------------------------------------------------------------
- * Bootstrap button.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ * Bootstrap (v4.3.1): button.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
 
-import BaseComponent from './base-component.js'
-import EventHandler from './dom/event-handler.js'
-import { defineJQueryPlugin } from './util/index.js'
+import $ from 'jquery'
 
 /**
+ * ------------------------------------------------------------------------
  * Constants
+ * ------------------------------------------------------------------------
  */
 
-const NAME = 'button'
-const DATA_KEY = 'bs.button'
-const EVENT_KEY = `.${DATA_KEY}`
-const DATA_API_KEY = '.data-api'
+const NAME                = 'button'
+const VERSION             = '4.3.1'
+const DATA_KEY            = 'bs.button'
+const EVENT_KEY           = `.${DATA_KEY}`
+const DATA_API_KEY        = '.data-api'
+const JQUERY_NO_CONFLICT  = $.fn[NAME]
 
-const CLASS_NAME_ACTIVE = 'active'
-const SELECTOR_DATA_TOGGLE = '[data-bs-toggle="button"]'
-const EVENT_CLICK_DATA_API = `click${EVENT_KEY}${DATA_API_KEY}`
+const ClassName = {
+  ACTIVE : 'active',
+  BUTTON : 'btn',
+  FOCUS  : 'focus'
+}
+
+const Selector = {
+  DATA_TOGGLE_CARROT : '[data-toggle^="button"]',
+  DATA_TOGGLE        : '[data-toggle="buttons"]',
+  INPUT              : 'input:not([type="hidden"])',
+  ACTIVE             : '.active',
+  BUTTON             : '.btn'
+}
+
+const Event = {
+  CLICK_DATA_API      : `click${EVENT_KEY}${DATA_API_KEY}`,
+  FOCUS_BLUR_DATA_API : `focus${EVENT_KEY}${DATA_API_KEY} ` +
+                          `blur${EVENT_KEY}${DATA_API_KEY}`
+}
 
 /**
- * Class definition
+ * ------------------------------------------------------------------------
+ * Class Definition
+ * ------------------------------------------------------------------------
  */
 
-class Button extends BaseComponent {
+class Button {
+  constructor(element) {
+    this._element = element
+  }
+
   // Getters
-  static get NAME() {
-    return NAME
+
+  static get VERSION() {
+    return VERSION
   }
 
   // Public
+
   toggle() {
-    // Toggle class and sync the `aria-pressed` attribute with the return value of the `.toggle()` method
-    this._element.setAttribute('aria-pressed', this._element.classList.toggle(CLASS_NAME_ACTIVE))
+    let triggerChangeEvent = true
+    let addAriaPressed = true
+    const rootElement = $(this._element).closest(
+      Selector.DATA_TOGGLE
+    )[0]
+
+    if (rootElement) {
+      const input = this._element.querySelector(Selector.INPUT)
+
+      if (input) {
+        if (input.type === 'radio') {
+          if (input.checked &&
+            this._element.classList.contains(ClassName.ACTIVE)) {
+            triggerChangeEvent = false
+          } else {
+            const activeElement = rootElement.querySelector(Selector.ACTIVE)
+
+            if (activeElement) {
+              $(activeElement).removeClass(ClassName.ACTIVE)
+            }
+          }
+        }
+
+        if (triggerChangeEvent) {
+          if (input.hasAttribute('disabled') ||
+            rootElement.hasAttribute('disabled') ||
+            input.classList.contains('disabled') ||
+            rootElement.classList.contains('disabled')) {
+            return
+          }
+          input.checked = !this._element.classList.contains(ClassName.ACTIVE)
+          $(input).trigger('change')
+        }
+
+        input.focus()
+        addAriaPressed = false
+      }
+    }
+
+    if (addAriaPressed) {
+      this._element.setAttribute('aria-pressed',
+        !this._element.classList.contains(ClassName.ACTIVE))
+    }
+
+    if (triggerChangeEvent) {
+      $(this._element).toggleClass(ClassName.ACTIVE)
+    }
+  }
+
+  dispose() {
+    $.removeData(this._element, DATA_KEY)
+    this._element = null
   }
 
   // Static
-  static jQueryInterface(config) {
+
+  static _jQueryInterface(config) {
     return this.each(function () {
-      const data = Button.getOrCreateInstance(this)
+      let data = $(this).data(DATA_KEY)
+
+      if (!data) {
+        data = new Button(this)
+        $(this).data(DATA_KEY, data)
+      }
 
       if (config === 'toggle') {
         data[config]()
@@ -51,22 +133,39 @@ class Button extends BaseComponent {
 }
 
 /**
- * Data API implementation
+ * ------------------------------------------------------------------------
+ * Data Api implementation
+ * ------------------------------------------------------------------------
  */
 
-EventHandler.on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, event => {
-  event.preventDefault()
+$(document)
+  .on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE_CARROT, (event) => {
+    event.preventDefault()
 
-  const button = event.target.closest(SELECTOR_DATA_TOGGLE)
-  const data = Button.getOrCreateInstance(button)
+    let button = event.target
 
-  data.toggle()
-})
+    if (!$(button).hasClass(ClassName.BUTTON)) {
+      button = $(button).closest(Selector.BUTTON)
+    }
+
+    Button._jQueryInterface.call($(button), 'toggle')
+  })
+  .on(Event.FOCUS_BLUR_DATA_API, Selector.DATA_TOGGLE_CARROT, (event) => {
+    const button = $(event.target).closest(Selector.BUTTON)[0]
+    $(button).toggleClass(ClassName.FOCUS, /^focus(in)?$/.test(event.type))
+  })
 
 /**
+ * ------------------------------------------------------------------------
  * jQuery
+ * ------------------------------------------------------------------------
  */
 
-defineJQueryPlugin(Button)
+$.fn[NAME] = Button._jQueryInterface
+$.fn[NAME].Constructor = Button
+$.fn[NAME].noConflict = () => {
+  $.fn[NAME] = JQUERY_NO_CONFLICT
+  return Button._jQueryInterface
+}
 
 export default Button

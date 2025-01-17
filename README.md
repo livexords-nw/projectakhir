@@ -19,19 +19,20 @@ Aplikasi berbasis web sederhana menggunakan PHP native dengan CSS Bootstrap dan 
 6. **UI/UX**:
    - Responsif dengan Bootstrap.
 
-## **Versi Terbaru (2.0.0)**
+## **Versi Terbaru (2.1.0)**
 
-**Big Update**: Pembaruan besar dengan fitur-fitur canggih dan sistem yang diperbaiki:
+**Update Terbaru**: Pembaruan penting untuk meningkatkan performa dan fungsionalitas aplikasi:
 
-- **Penambahan Sistem OTP**:
-  - Mendukung OTP sebagai langkah verifikasi tambahan.
-- **Peningkatan Sistem Pemesanan**:
-  - Pemrosesan pesanan lebih cepat dan efisien.
-  - Fitur edit pesanan lebih fleksibel.
-- **Sistem Logger Diperbarui**:
-  - Log aktivitas lebih rinci untuk analisis dan audit.
-- **Penambahan Sistem Manajemen Akun**:
-  - Fitur pengelolaan akun untuk admin dan user.
+1. **Membenahi Sistem OTP**:
+   - Optimalisasi alur verifikasi OTP agar lebih stabil dan aman.
+2. **Peningkatan Sistem Logger**:
+   - Log aktivitas lebih rinci dan dapat diakses lebih mudah.
+3. **Penambahan Fitur Laporan Penjualan**:
+   - Sistem laporan yang menampilkan detail penjualan secara komprehensif.
+4. **Penambahan Detail Pesanan**:
+   - Detail pesanan lebih lengkap baik dari sisi user maupun admin.
+5. **Melokalkan Beberapa Library**:
+   - Library disimpan secara lokal untuk memastikan kompatibilitas di seluruh browser.
 
 ## **Struktur Folder**
 
@@ -46,8 +47,6 @@ projectakhir/
 ├── account/           # Sistem manajemen akun
 └── README.md          # Dokumentasi proyek
 ```
-
-````
 
 ## **Cara Menggunakan**
 
@@ -69,5 +68,4 @@ Buka _issue_ atau buat _pull request_ untuk saran atau perbaikan.
 
 ---
 
-Dengan pembaruan besar ini, aplikasi kini memiliki sistem yang lebih aman, efisien, dan kaya fitur untuk memenuhi kebutuhan pengguna yang lebih kompleks.
-````
+Dengan pembaruan ini, aplikasi kini memiliki sistem yang lebih aman, efisien, dan kaya fitur untuk memenuhi kebutuhan pengguna yang lebih kompleks.

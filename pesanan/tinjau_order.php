@@ -64,13 +64,85 @@ $details_stmt->bind_param('i', $order_id);
 $details_stmt->execute();
 $details_result = $details_stmt->get_result();
 $details = $details_result->fetch_all(MYSQLI_ASSOC);
+
+// Query data pemesanan
+$order_query = "
+    SELECT 
+        p.id, 
+        p.nama_pemesan, 
+        p.tanggal_pemesanan, 
+        p.total_harga, 
+        p.status, 
+        p.booking_start, 
+        p.booking_end, 
+        p.payment_proof, 
+        p.info, 
+        p.type_payment, 
+        m.table_number
+    FROM pemesanan p
+    LEFT JOIN meja m ON p.meja_id = m.id
+    WHERE p.id = ?
+";
+$stmt = mysqli_prepare($connection, $order_query);
+mysqli_stmt_bind_param($stmt, 'i', $order_id);
+mysqli_stmt_execute($stmt);
+$order_result = mysqli_stmt_get_result($stmt);
+$order = mysqli_fetch_assoc($order_result);
+
+// Jika tidak ada data pemesanan
+if (!$order) {
+    die('Data pemesanan tidak ditemukan.');
+}
 ?>
 
 <section class="section">
     <div class="container my-4">
         <div class="section-header d-flex justify-content-between">
             <h1>Tinjau Pesanan #<?= $order['id'] ?> <?= $order['nama_pemesan'] ?></h1>
-            <a href="index.php" class="btn btn-primary">Kembali</a>
+            <a href="index.php" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i>
+                Kembali
+            </a>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5>Informasi Pemesanan</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>ID Pemesanan:</strong> <?= htmlspecialchars($order['id']) ?></p>
+                        <p><strong>Nama Pemesan:</strong> <?= htmlspecialchars($order['nama_pemesan']) ?></p>
+                        <p><strong>Tanggal Pemesanan:</strong> <?= htmlspecialchars($order['tanggal_pemesanan']) ?: ' -' ?></p>
+                        <p><strong>Nomor Meja:</strong> <?= htmlspecialchars($order['table_number']) ?: 'N/A' ?></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Total Harga:</strong> Rp <?= number_format($order['total_harga'], 0, ',', '.') ?></p>
+                        <p><strong>Tipe Pembayaran:</strong> <?= htmlspecialchars($order['type_payment']) ?: 'Tidak Diketahui' ?></p>
+                        <p><strong>Status:</strong>
+                            <?php
+                            $status = htmlspecialchars($order['status']);
+                            $info = htmlspecialchars($order['info']); // Ambil kolom info
+                            $badgeColor = match ($status) {
+                                'pending' => 'badge-warning',
+                                'canceled' => 'badge-danger',
+                                'approved' => 'badge-success',
+                                default => 'badge-secondary',
+                            };
+
+                            // Tentukan apakah status "Canceled by User" atau "Canceled by Admin"
+                            if ($status === 'canceled') {
+                                if (str_starts_with($info, 'user')) {
+                                    $status .= ' by User';
+                                }
+                            }
+                            ?>
+                            <span class="badge <?= $badgeColor ?>"><?= $status ?></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <form method="post" action="order_management.php" id="formTinjau">
@@ -81,7 +153,7 @@ $details = $details_result->fetch_all(MYSQLI_ASSOC);
                     <div class="mb-3">
                         <label for="status" class="form-label">Status</label>
                         <select class="form-control" id="status" name="action" onchange="togglePesanArea()">
-                            <option value="completed" <?= $order['status'] == 'completed' ? 'selected' : '' ?>>Selesai</option>
+                            <option value="approved" <?= $order['status'] == 'approved' ? 'selected' : '' ?>>Approved</option>
                             <option value="canceled" <?= $order['status'] == 'canceled' ? 'selected' : '' ?>>Dibatalkan</option>
                         </select>
                     </div>
@@ -89,6 +161,17 @@ $details = $details_result->fetch_all(MYSQLI_ASSOC);
                     <div class="mb-3" id="pesanArea" style="display: none;">
                         <label for="pesan" class="form-label">Alasan</label>
                         <textarea class="form-control" id="pesan" name="info" rows="5" style="font-size: 16px; height: 80px;"></textarea>
+                    </div>
+
+                    <!-- Tambahkan Dropdown untuk Template Alasan -->
+                    <div class="mb-3" id="templateArea" style="display: none;">
+                        <label for="template" class="form-label">Template Alasan</label>
+                        <select class="form-control" id="template" onchange="insertTemplate(this.value)">
+                            <option value="">Pilih Template</option>
+                            <option value="Stok barang habis">Stok barang habis</option>
+                            <option value="Pembayaran tidak valid">Pembayaran tidak valid</option>
+                            <option value="Kesalahan teknis pada sistem">Kesalahan teknis pada sistem</option>
+                        </select>
                     </div>
 
                     <?php if (!empty($order['payment_proof'])): ?>
@@ -175,4 +258,93 @@ $details = $details_result->fetch_all(MYSQLI_ASSOC);
             ]
         });
     }
+
+    // Fungsi untuk menampilkan atau menyembunyikan textarea alasan
+    function togglePesanArea() {
+        const statusSelect = document.getElementById('status');
+        const pesanArea = document.getElementById('pesanArea');
+
+        if (statusSelect.value === 'canceled') {
+            pesanArea.style.display = 'block';
+        } else {
+            pesanArea.style.display = 'none';
+        }
+    }
+
+    // Fungsi untuk menambahkan template alasan
+    function insertTemplate(template) {
+        const pesanField = document.getElementById('pesan');
+        pesanField.value = template;
+    }
+
+    // Fungsi untuk validasi sebelum submit
+    function confirmTinjau() {
+        const statusSelect = document.getElementById('status');
+        const pesanField = document.getElementById('pesan');
+
+        if (statusSelect.value === 'canceled' && pesanField.value.trim() === '') {
+            iziToast.error({
+                title: 'Error',
+                message: 'Anda harus mengisi alasan pembatalan.',
+                position: 'topCenter',
+                timeout: 5000
+            });
+            return; // Jangan submit jika validasi gagal
+        }
+
+        iziToast.question({
+            timeout: false,
+            close: false,
+            overlay: true,
+            displayMode: 'once',
+            title: 'Konfirmasi Peninjauan',
+            message: 'Apakah Anda yakin ingin meninjau pesanan ini?',
+            position: 'center',
+            buttons: [
+                ['<button>Ya</button>', function(instance, toast) {
+                    document.getElementById('formTinjau').submit();
+                    instance.hide({
+                        transitionOut: 'fadeOut'
+                    }, toast, 'button');
+                }],
+                ['<button>Tidak</button>', function(instance, toast) {
+                    instance.hide({
+                        transitionOut: 'fadeOut'
+                    }, toast, 'button');
+                }]
+            ]
+        });
+    }
+
+    // Event listener untuk memastikan togglePesanArea dipanggil saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', togglePesanArea);
+
+    // Tampilkan template area jika status adalah "canceled"
+    function toggleTemplateArea() {
+        const statusSelect = document.getElementById('status');
+        const templateArea = document.getElementById('templateArea');
+
+        if (statusSelect.value === 'canceled') {
+            templateArea.style.display = 'block';
+        } else {
+            templateArea.style.display = 'none';
+        }
+    }
+
+    // Gabungkan togglePesanArea dan toggleTemplateArea
+    function togglePesanArea() {
+        const statusSelect = document.getElementById('status');
+        const pesanArea = document.getElementById('pesanArea');
+        const templateArea = document.getElementById('templateArea');
+
+        if (statusSelect.value === 'canceled') {
+            pesanArea.style.display = 'block';
+            templateArea.style.display = 'block';
+        } else {
+            pesanArea.style.display = 'none';
+            templateArea.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', togglePesanArea);
 </script>

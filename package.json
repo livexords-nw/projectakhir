@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.7.2",
+    "bootstrap": "^4.3.1",
+    "datatables.net": "^1.10.22",
+    "jquery": "^3.3.1",
+    "jquery.nicescroll": "^3.7.6",
+    "moment": "^2.24.0",
+    "popper.js": "^1.14.7"
+  },
+  "name": "projectakhir_esteh",
+  "version": "1.0.0",
+  "description": "Aplikasi berbasis web sederhana menggunakan PHP native dengan CSS Bootstrap dan JavaScript. Proyek ini mendukung manajemen produk, mencakup CRUD, serta fitur keamanan, tampilan responsif, dan sistem tambahan yang canggih.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

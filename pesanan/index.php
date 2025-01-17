@@ -49,7 +49,7 @@ $pesanan_pending = $pesanan_pending_result ? $pesanan_pending_result->fetch_all(
 // Query untuk daftar pesanan yang telah selesai
 $pesanan_selesai_result = $connection->query("
     SELECT * FROM pemesanan 
-    WHERE status = 'completed' 
+    WHERE status = 'approved' 
     ORDER BY tanggal_pemesanan DESC
 ");
 $pesanan_selesai = $pesanan_selesai_result ? $pesanan_selesai_result->fetch_all(MYSQLI_ASSOC) : [];
@@ -69,19 +69,6 @@ $pesanan_semua_result = $connection->query("
 ");
 $pesanan_semua = $pesanan_semua_result ? $pesanan_semua_result->fetch_all(MYSQLI_ASSOC) : [];
 
-function getStatusClass($status)
-{
-  switch ($status) {
-    case 'pending':
-      return 'badge bg-warning text-light';
-    case 'completed':
-      return 'badge bg-success text-light';
-    case 'canceled':
-      return 'badge bg-danger text-light';
-    default:
-      return 'badge bg-secondary text-light';
-  }
-}
 ?>
 
 <section class="section">
@@ -97,8 +84,8 @@ function getStatusClass($status)
   <div class="row mb-4">
     <div class="col-lg-4 col-md-6 col-sm-6 col-12">
       <div class="card card-statistic-1">
-        <div class="card-icon bg-warning">
-          <i class="fas fa-hourglass-half"></i>
+        <div class="card-icon bg-warning text-white">
+          <i class="fas fa-hourglass-half fa-2x"></i>
         </div>
         <div class="card-wrap">
           <div class="card-header">
@@ -112,8 +99,8 @@ function getStatusClass($status)
     </div>
     <div class="col-lg-4 col-md-6 col-sm-6 col-12">
       <div class="card card-statistic-1">
-        <div class="card-icon bg-success">
-          <i class="fas fa-check-circle"></i>
+        <div class="card-icon bg-success text-white">
+          <i class="fas fa-check-circle fa-2x"></i>
         </div>
         <div class="card-wrap">
           <div class="card-header">
@@ -127,8 +114,8 @@ function getStatusClass($status)
     </div>
     <div class="col-lg-4 col-md-6 col-sm-6 col-12">
       <div class="card card-statistic-1">
-        <div class="card-icon bg-danger">
-          <i class="fas fa-times-circle"></i>
+        <div class="card-icon bg-danger text-white">
+          <i class="fas fa-times-circle fa-2x"></i>
         </div>
         <div class="card-wrap">
           <div class="card-header">
@@ -142,8 +129,8 @@ function getStatusClass($status)
     </div>
     <div class="col-lg-4 col-md-6 col-sm-6 col-12 mx-auto">
       <div class="card card-statistic-1">
-        <div class="card-icon bg-info">
-          <i class="fas fa-clipboard-list"></i>
+        <div class="card-icon bg-info text-white">
+          <i class="fas fa-clipboard-list fa-2x"></i>
         </div>
         <div class="card-wrap">
           <div class="card-header">
@@ -198,9 +185,24 @@ function getStatusClass($status)
               <div class="card-body">
                 <h5>#<?= $pesanan['id'] ?> - <?= htmlspecialchars($pesanan['nama_pemesan']) ?></h5>
                 <p><strong>Status:</strong>
-                  <span class="<?= getStatusClass($pesanan['status']) ?>">
-                    <?= ucfirst($pesanan['status']) ?>
-                  </span>
+                  <?php
+                  $status = htmlspecialchars($pesanan['status']);
+                  $info = htmlspecialchars($pesanan['info']); // Ambil kolom info
+                  $badgeColor = match ($status) {
+                    'pending' => 'badge-warning',
+                    'canceled' => 'badge-danger',
+                    'approved' => 'badge-success',
+                    default => 'badge-secondary',
+                  };
+
+                  // Tentukan apakah status "Canceled by User" atau "Canceled by Admin"
+                  if ($status === 'canceled') {
+                    if (str_starts_with($info, 'user')) {
+                      $status .= ' by User';
+                    }
+                  }
+                  ?>
+                  <span class="badge <?= $badgeColor ?>"><?= $status ?></span>
                 </p>
                 <p><strong>Tanggal:</strong> <?= date('d M Y H:i', strtotime($pesanan['tanggal_pemesanan'])) ?></p>
                 <p><strong>Total:</strong> Rp <?= number_format($pesanan['total_harga'], 0, ',', '.') ?></p>

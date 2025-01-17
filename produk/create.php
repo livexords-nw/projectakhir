@@ -41,7 +41,7 @@ $username = $_SESSION['login']['username'] ?? 'Unknown User';
 <section class="section">
   <div class="section-header d-flex justify-content-between">
     <h1>Tambah Data Produk</h1>
-    <a href="./index.php" class="btn btn-light">Kembali</a>
+    <a href="./index.php" class="btn btn-primary">Kembali</a>
   </div>
   <div class="row">
     <div class="col-12">

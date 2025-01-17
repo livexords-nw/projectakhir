@@ -1,18 +1,13 @@
-@include deprecate("`alert-variant()`", "v5.3.0", "v6.0.0");
-
-// scss-docs-start alert-variant-mixin
 @mixin alert-variant($background, $border, $color) {
-  --#{$prefix}alert-color: #{$color};
-  --#{$prefix}alert-bg: #{$background};
-  --#{$prefix}alert-border-color: #{$border};
-  --#{$prefix}alert-link-color: #{shade-color($color, 20%)};
+  color: $color;
+  @include gradient-bg($background);
+  border-color: $border;
 
-  @if $enable-gradients {
-    background-image: var(--#{$prefix}gradient);
+  hr {
+    border-top-color: darken($border, 5%);
   }
 
   .alert-link {
-    color: var(--#{$prefix}alert-link-color);
+    color: darken($color, 10%);
   }
 }
-// scss-docs-end alert-variant-mixin
